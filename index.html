@@ -1,67 +1,303 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Roadrunner Runaway</title>
-<link rel="stylesheet" href="style.css">
+<title>ROADRUNNER RUNAWAY</title>
+
+<style>
+
+body{
+background-image:url("background.jpg");
+background-size:cover;
+background-position:center;
+font-family:Arial;
+color:white;
+text-align:center;
+margin:0;
+}
+
+.panel{
+background:rgba(0,0,0,0.8);
+padding:20px;
+margin:40px auto;
+width:500px;
+border-radius:10px;
+}
+
+input,button,textarea{
+padding:10px;
+margin:5px;
+}
+
+textarea{
+width:90%;
+height:80px;
+}
+
+#adminpanel,#memberpanel{
+display:none;
+}
+
+#dropzone{
+border:2px dashed white;
+padding:30px;
+margin-top:10px;
+}
+
+audio{
+width:90%;
+margin:10px;
+}
+
+</style>
 </head>
 
 <body>
 
+<div class="panel" id="login">
+
 <h1>ROADRUNNER RUNAWAY</h1>
-
-<div id="login">
-
-<h2>Login</h2>
 
 <input id="user" placeholder="Username"><br>
 <input id="pass" type="password" placeholder="Password"><br>
 
 <button onclick="login()">Login</button>
 
-<p>Admin: admin / admin</p>
+<p id="error"></p>
 
 </div>
 
 
-<div id="admin" class="hidden">
+<div class="panel" id="startseite">
 
-<h2>Admin Dashboard</h2>
+<h2>Startseite</h2>
 
-<h3>Member erstellen</h3>
-
-<input id="newUser" placeholder="Username">
-<input id="newPass" placeholder="Password">
-
-<button onclick="addUser()">Erstellen</button>
-
-<h3>Mitglieder</h3>
-
-<div id="users"></div>
-
-<h3>Musik Upload</h3>
-
-<input type="file" id="song">
-
-<button onclick="upload()">Upload</button>
+<p id="starttext"></p>
 
 </div>
 
 
-<div id="member" class="hidden">
+<div class="panel" id="memberpanel">
 
 <h2>Memberbereich</h2>
 
-<audio id="player" controls></audio>
+<p id="membertext"></p>
 
-<select id="playlist"></select>
-
-<button onclick="play()">Play</button>
+<div id="musiclist"></div>
 
 </div>
 
-<script src="script.js"></script>
+
+<div class="panel" id="adminpanel">
+
+<h2>Adminbereich</h2>
+
+<button onclick="logout()">Logout</button>
+
+<h3>Startseite bearbeiten</h3>
+
+<textarea id="editstart"></textarea><br>
+<button onclick="saveStart()">Speichern</button>
+
+<h3>Memberbereich bearbeiten</h3>
+
+<textarea id="editmember"></textarea><br>
+<button onclick="saveMember()">Speichern</button>
+
+<h3>Neuen Member erstellen</h3>
+
+<input id="newuser" placeholder="Username">
+<input id="newpass" placeholder="Password">
+<button onclick="addMember()">Member hinzufügen</button>
+
+<h3>Mitgliederliste</h3>
+
+<div id="memberlist"></div>
+
+<h3>Musik hochladen</h3>
+
+<div id="dropzone">Musik hier reinziehen</div>
+
+<div id="adminmusic"></div>
+
+</div>
+
+<script>
+
+let adminPass="roadrunner";
+
+if(!localStorage.members){
+localStorage.members=JSON.stringify([])
+}
+
+if(!localStorage.starttext){
+localStorage.starttext="Willkommen bei Roadrunner Runaway"
+}
+
+if(!localStorage.membertext){
+localStorage.membertext="Member Bereich"
+}
+
+document.getElementById("starttext").innerText=localStorage.starttext
+document.getElementById("membertext").innerText=localStorage.membertext
+
+function login(){
+
+let u=document.getElementById("user").value
+let p=document.getElementById("pass").value
+
+if(u==="admin" && p===adminPass){
+
+document.getElementById("adminpanel").style.display="block"
+document.getElementById("login").style.display="none"
+
+loadMembers()
+
+}
+else{
+
+let members=JSON.parse(localStorage.members)
+
+for(let m of members){
+
+if(m.user===u && m.pass===p){
+
+document.getElementById("memberpanel").style.display="block"
+document.getElementById("login").style.display="none"
+
+loadMusic()
+
+return
+}
+
+}
+
+document.getElementById("error").innerText="Login falsch"
+
+}
+
+}
+
+function logout(){
+
+location.reload()
+
+}
+
+function saveStart(){
+
+let text=document.getElementById("editstart").value
+
+localStorage.starttext=text
+
+document.getElementById("starttext").innerText=text
+
+}
+
+function saveMember(){
+
+let text=document.getElementById("editmember").value
+
+localStorage.membertext=text
+
+document.getElementById("membertext").innerText=text
+
+}
+
+function addMember(){
+
+let u=document.getElementById("newuser").value
+let p=document.getElementById("newpass").value
+
+let members=JSON.parse(localStorage.members)
+
+members.push({user:u,pass:p})
+
+localStorage.members=JSON.stringify(members)
+
+loadMembers()
+
+}
+
+function deleteMember(name){
+
+let members=JSON.parse(localStorage.members)
+
+members=members.filter(m=>m.user!==name)
+
+localStorage.members=JSON.stringify(members)
+
+loadMembers()
+
+}
+
+function loadMembers(){
+
+let members=JSON.parse(localStorage.members)
+
+let html=""
+
+for(let m of members){
+
+html+=m.user+" <button onclick='deleteMember(\""+m.user+"\")'>löschen</button><br>"
+
+}
+
+document.getElementById("memberlist").innerHTML=html
+
+}
+
+let drop=document.getElementById("dropzone")
+
+drop.addEventListener("dragover",e=>{
+
+e.preventDefault()
+
+})
+
+drop.addEventListener("drop",e=>{
+
+e.preventDefault()
+
+let file=e.dataTransfer.files[0]
+
+let reader=new FileReader()
+
+reader.onload=function(){
+
+let music=JSON.parse(localStorage.music||"[]")
+
+music.push(reader.result)
+
+localStorage.music=JSON.stringify(music)
+
+loadMusic()
+
+}
+
+reader.readAsDataURL(file)
+
+})
+
+function loadMusic(){
+
+let music=JSON.parse(localStorage.music||"[]")
+
+let html=""
+
+for(let m of music){
+
+html+="<audio controls src='"+m+"'></audio><br>"
+
+}
+
+document.getElementById("musiclist").innerHTML=html
+document.getElementById("adminmusic").innerHTML=html
+
+}
+
+loadMusic()
+
+</script>
 
 </body>
 </html>
