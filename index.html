@@ -17,10 +17,10 @@ margin:0;
 }
 
 .panel{
-background:rgba(0,0,0,0.8);
+background:rgba(0,0,0,0.85);
 padding:30px;
-margin:60px auto;
-width:500px;
+margin:50px auto;
+width:550px;
 border-radius:10px;
 }
 
@@ -29,7 +29,11 @@ padding:10px;
 margin:5px;
 }
 
-#adminpanel,#memberpanel{
+button{
+cursor:pointer;
+}
+
+#adminpanel,#memberpanel,#startseite{
 display:none;
 }
 
@@ -48,12 +52,25 @@ margin:10px;
 
 <h1>ROADRUNNER RUNAWAY</h1>
 
+<h2>Login</h2>
+
 <input id="user" placeholder="Username"><br>
 <input id="pass" type="password" placeholder="Password"><br>
 
 <button onclick="login()">Login</button>
 
 <p id="error"></p>
+
+</div>
+
+
+<div class="panel" id="startseite">
+
+<h2>Startseite</h2>
+
+<p>Willkommen bei Roadrunner Runaway</p>
+
+<button onclick="logout()">Logout</button>
 
 </div>
 
@@ -70,6 +87,8 @@ margin:10px;
 <audio controls src="music/song2.mp3"></audio>
 <audio controls src="music/song3.mp3"></audio>
 
+<br>
+
 <button onclick="logout()">Logout</button>
 
 </div>
@@ -79,16 +98,18 @@ margin:10px;
 
 <h2>Adminbereich</h2>
 
-<p>Hier kannst du Member verwalten</p>
+<p>Mitglieder verwalten</p>
 
-<input id="newuser" placeholder="Neuer Member">
-<input id="newpass" placeholder="Passwort">
+<input id="newuser" placeholder="Username">
+<input id="newpass" placeholder="Password">
 
-<button onclick="addMember()">Member hinzufügen</button>
+<button onclick="addMember()">Member erstellen</button>
 
-<h3>Mitglieder</h3>
+<h3>Mitgliederliste</h3>
 
 <div id="memberlist"></div>
+
+<br>
 
 <button onclick="logout()">Logout</button>
 
