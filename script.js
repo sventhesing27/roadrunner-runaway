@@ -1,112 +1,191 @@
+const firebaseConfig = {
+
+apiKey: "DEIN_KEY",
+authDomain: "DEIN_PROJEKT.firebaseapp.com",
+projectId: "DEIN_PROJEKT"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+
+let adminUser="admin";
+let adminPass="roadrunner";
+
 
 function login(){
 
-let u=document.getElementById("user").value
-let p=document.getElementById("pass").value
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
 
-if(u==="admin" && p==="admin"){
+if(u===adminUser && p===adminPass){
 
-document.getElementById("login").style.display="none"
-document.getElementById("admin").style.display="block"
+document.getElementById("login").style.display="none";
+document.getElementById("adminpanel").style.display="block";
 
-loadUsers()
+loadMembers();
+loadMusic();
+loadInfo();
+loadChat();
 
-return
-}
-
-document.getElementById("login").style.display="none"
-document.getElementById("member").style.display="block"
-
-loadSongs()
+return;
 
 }
 
-async function addUser(){
+db.collection("members").get().then(snapshot=>{
 
-let user=document.getElementById("newUser").value
-let pass=document.getElementById("newPass").value
+snapshot.forEach(doc=>{
 
-await fetch("/add-user",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({user,pass})
-})
+let m=doc.data();
 
-loadUsers()
+if(m.user===u && m.pass===p){
 
-}
+document.getElementById("login").style.display="none";
+document.getElementById("memberpanel").style.display="block";
 
-async function loadUsers(){
-
-let res=await fetch("/users")
-
-let users=await res.json()
-
-let html=""
-
-users.forEach((u,i)=>{
-
-html+=u.user+" <button onclick='deleteUser("+i+")'>löschen</button><br>"
-
-})
-
-document.getElementById("users").innerHTML=html
+loadMusic();
+loadInfo();
+loadChat();
 
 }
 
-async function deleteUser(id){
+});
 
-await fetch("/user/"+id,{method:"DELETE"})
-
-loadUsers()
+});
 
 }
 
-async function upload(){
+function logout(){
+location.reload();
+}
 
-let file=document.getElementById("song").files[0]
+function addMember(){
 
-let form=new FormData()
+let u=document.getElementById("newuser").value;
+let p=document.getElementById("newpass").value;
 
-form.append("song",file)
+db.collection("members").add({
+user:u,
+pass:p
+});
 
-await fetch("/upload",{
-method:"POST",
-body:form
-})
-
-alert("Song hochgeladen")
+loadMembers();
 
 }
 
-async function loadSongs(){
+function loadMembers(){
 
-let res=await fetch("/songs")
+db.collection("members").get().then(snapshot=>{
 
-let songs=await res.json()
+let html="";
 
-let playlist=document.getElementById("playlist")
+snapshot.forEach(doc=>{
 
-playlist.innerHTML=""
+let m=doc.data();
 
-songs.forEach(s=>{
+html+=m.user+" <button onclick='deleteMember(\""+doc.id+"\")'>löschen</button><br>";
 
-let opt=document.createElement("option")
+});
 
-opt.text=s
+document.getElementById("memberlist").innerHTML=html;
 
-opt.value="/music/"+s
-
-playlist.appendChild(opt)
-
-})
+});
 
 }
 
-function play(){
+function deleteMember(id){
 
-let src=document.getElementById("playlist").value
+db.collection("members").doc(id).delete();
 
-document.getElementById("player").src=src
+loadMembers();
+
+}
+
+function addMusic(){
+
+let link=document.getElementById("musiclink").value;
+
+db.collection("music").add({
+url:link
+});
+
+loadMusic();
+
+}
+
+function loadMusic(){
+
+db.collection("music").onSnapshot(snapshot=>{
+
+let html="";
+
+snapshot.forEach(doc=>{
+
+let m=doc.data();
+
+html+="<audio controls src='"+m.url+"'></audio><br>";
+
+});
+
+document.getElementById("musiclist").innerHTML=html;
+
+});
+
+}
+
+function postInfo(){
+
+let text=document.getElementById("infotext").value;
+
+db.collection("info").add({
+text:text
+});
+
+}
+
+function loadInfo(){
+
+db.collection("info").onSnapshot(snapshot=>{
+
+let html="";
+
+snapshot.forEach(doc=>{
+
+html+="<p>"+doc.data().text+"</p>";
+
+});
+
+document.getElementById("infoboard").innerHTML=html;
+
+});
+
+}
+
+function sendMessage(){
+
+let msg=document.getElementById("chatmsg").value;
+
+db.collection("chat").add({
+text:msg
+});
+
+}
+
+function loadChat(){
+
+db.collection("chat").onSnapshot(snapshot=>{
+
+let html="";
+
+snapshot.forEach(doc=>{
+
+html+="<p>"+doc.data().text+"</p>";
+
+});
+
+document.getElementById("chatbox").innerHTML=html;
+
+});
 
 }
