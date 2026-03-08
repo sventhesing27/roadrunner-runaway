@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Roadrunner Runaway</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>ROADRUNNER RUNAWAY</h1>
+
+<div id="login">
+
+<h2>Login</h2>
+
+<input id="user" placeholder="Username"><br>
+<input id="pass" type="password" placeholder="Password"><br>
+
+<button onclick="login()">Login</button>
+
+<p>Admin: admin / admin</p>
+
+</div>
+
+
+<div id="admin" class="hidden">
+
+<h2>Admin Dashboard</h2>
+
+<h3>Member erstellen</h3>
+
+<input id="newUser" placeholder="Username">
+<input id="newPass" placeholder="Password">
+
+<button onclick="addUser()">Erstellen</button>
+
+<h3>Mitglieder</h3>
+
+<div id="users"></div>
+
+<h3>Musik Upload</h3>
+
+<input type="file" id="song">
+
+<button onclick="upload()">Upload</button>
+
+</div>
+
+
+<div id="member" class="hidden">
+
+<h2>Memberbereich</h2>
+
+<audio id="player" controls></audio>
+
+<select id="playlist"></select>
+
+<button onclick="play()">Play</button>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
