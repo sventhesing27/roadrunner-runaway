@@ -2,47 +2,13 @@
 <html>
 <head>
 
-<title>ROADRUNNER RUNAWAY</title>
+<meta charset="UTF-8">
+<title>Roadrunner Runaway</title>
 
-<style>
+<link rel="stylesheet" href="style.css">
 
-body{
-background-image:url("background.jpg");
-background-size:cover;
-background-position:center;
-font-family:Arial;
-color:white;
-text-align:center;
-margin:0;
-}
-
-.panel{
-background:rgba(0,0,0,0.85);
-padding:30px;
-margin:50px auto;
-width:550px;
-border-radius:10px;
-}
-
-input,button{
-padding:10px;
-margin:5px;
-}
-
-button{
-cursor:pointer;
-}
-
-#adminpanel,#memberpanel,#startseite{
-display:none;
-}
-
-audio{
-width:90%;
-margin:10px;
-}
-
-</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 </head>
 
@@ -51,8 +17,6 @@ margin:10px;
 <div class="panel" id="login">
 
 <h1>ROADRUNNER RUNAWAY</h1>
-
-<h2>Login</h2>
 
 <input id="user" placeholder="Username"><br>
 <input id="pass" type="password" placeholder="Password"><br>
@@ -64,41 +28,11 @@ margin:10px;
 </div>
 
 
-<div class="panel" id="startseite">
-
-<h2>Startseite</h2>
-
-<p>Willkommen bei Roadrunner Runaway</p>
-
-<button onclick="logout()">Logout</button>
-
-</div>
-
-
-<div class="panel" id="memberpanel">
-
-<h2>Memberbereich</h2>
-
-<p>Musik nur für Mitglieder</p>
-
-<h3>Playlist</h3>
-
-<audio controls src="music/song1.mp3"></audio>
-<audio controls src="music/song2.mp3"></audio>
-<audio controls src="music/song3.mp3"></audio>
-
-<br>
-
-<button onclick="logout()">Logout</button>
-
-</div>
-
-
 <div class="panel" id="adminpanel">
 
 <h2>Adminbereich</h2>
 
-<p>Mitglieder verwalten</p>
+<h3>Neuen Member erstellen</h3>
 
 <input id="newuser" placeholder="Username">
 <input id="newpass" placeholder="Password">
@@ -109,105 +43,46 @@ margin:10px;
 
 <div id="memberlist"></div>
 
-<br>
+<h3>Musik hinzufügen</h3>
+
+<input id="musiclink" placeholder="MP3 Link">
+<button onclick="addMusic()">Musik speichern</button>
+
+<h3>Information posten</h3>
+
+<input id="infotext" placeholder="Information">
+<button onclick="postInfo()">Posten</button>
 
 <button onclick="logout()">Logout</button>
 
 </div>
 
 
-<script>
+<div class="panel" id="memberpanel">
 
-let adminUser="admin"
-let adminPass="roadrunner"
+<h2>Memberbereich</h2>
 
-if(!localStorage.members){
-localStorage.members=JSON.stringify([])
-}
+<h3>Musik</h3>
 
-function login(){
+<div id="musiclist"></div>
 
-let u=document.getElementById("user").value
-let p=document.getElementById("pass").value
+<h3>Informationstafel</h3>
 
-if(u===adminUser && p===adminPass){
+<div id="infoboard"></div>
 
-document.getElementById("login").style.display="none"
-document.getElementById("adminpanel").style.display="block"
+<h3>Member Chat</h3>
 
-loadMembers()
+<div id="chatbox"></div>
 
-return
-}
+<input id="chatmsg" placeholder="Nachricht">
+<button onclick="sendMessage()">Senden</button>
 
-let members=JSON.parse(localStorage.members)
+<button onclick="logout()">Logout</button>
 
-for(let m of members){
+</div>
 
-if(m.user===u && m.pass===p){
 
-document.getElementById("login").style.display="none"
-document.getElementById("memberpanel").style.display="block"
-
-return
-}
-
-}
-
-document.getElementById("error").innerText="Login falsch"
-
-}
-
-function logout(){
-
-location.reload()
-
-}
-
-function addMember(){
-
-let u=document.getElementById("newuser").value
-let p=document.getElementById("newpass").value
-
-let members=JSON.parse(localStorage.members)
-
-members.push({user:u,pass:p})
-
-localStorage.members=JSON.stringify(members)
-
-loadMembers()
-
-}
-
-function deleteMember(name){
-
-let members=JSON.parse(localStorage.members)
-
-members=members.filter(m=>m.user!==name)
-
-localStorage.members=JSON.stringify(members)
-
-loadMembers()
-
-}
-
-function loadMembers(){
-
-let members=JSON.parse(localStorage.members)
-
-let html=""
-
-for(let m of members){
-
-html+=m.user+" <button onclick='deleteMember(\""+m.user+"\")'>löschen</button><br>"
-
-}
-
-document.getElementById("memberlist").innerHTML=html
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
