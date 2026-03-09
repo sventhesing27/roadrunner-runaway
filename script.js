@@ -1,191 +1,198 @@
-const firebaseConfig = {
-
-apiKey: "DEIN_KEY",
-authDomain: "DEIN_PROJEKT.firebaseapp.com",
-projectId: "DEIN_PROJEKT"
-
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.firestore();
-
-let adminUser="admin";
-let adminPass="roadrunner";
-
+let currentUser = ""
 
 function login(){
 
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
+let email = document.getElementById("user").value
+let password = document.getElementById("pass").value
 
-if(u===adminUser && p===adminPass){
+auth.signInWithEmailAndPassword(email,password)
 
-document.getElementById("login").style.display="none";
-document.getElementById("adminpanel").style.display="block";
+.then((userCredential)=>{
 
-loadMembers();
-loadMusic();
-loadInfo();
-loadChat();
+let user = userCredential.user
+currentUser = user.email
 
-return;
+document.getElementById("login").style.display="none"
 
-}
+if(user.email === "admin@runaway.de"){
 
-db.collection("members").get().then(snapshot=>{
+document.getElementById("adminpanel").style.display="block"
+loadMembers()
 
-snapshot.forEach(doc=>{
+}else{
 
-let m=doc.data();
-
-if(m.user===u && m.pass===p){
-
-document.getElementById("login").style.display="none";
-document.getElementById("memberpanel").style.display="block";
-
-loadMusic();
-loadInfo();
-loadChat();
+document.getElementById("memberpanel").style.display="block"
+loadMusic()
+loadInfo()
+loadChat()
 
 }
 
-});
+})
 
-});
+.catch((error)=>{
+
+document.getElementById("error").innerText = error.message
+
+})
 
 }
+
+
 
 function logout(){
-location.reload();
+
+auth.signOut()
+
+location.reload()
+
 }
+
+
 
 function addMember(){
 
-let u=document.getElementById("newuser").value;
-let p=document.getElementById("newpass").value;
+let user = document.getElementById("newuser").value
+let pass = document.getElementById("newpass").value
 
-db.collection("members").add({
-user:u,
-pass:p
-});
+auth.createUserWithEmailAndPassword(user,pass)
 
-loadMembers();
+.then(()=>{
+
+alert("Member erstellt")
+loadMembers()
+
+})
 
 }
+
+
 
 function loadMembers(){
 
-db.collection("members").get().then(snapshot=>{
+db.collection("members").get().then((snapshot)=>{
 
-let html="";
+let html=""
 
 snapshot.forEach(doc=>{
 
-let m=doc.data();
+html += "<p>"+doc.data().email+"</p>"
 
-html+=m.user+" <button onclick='deleteMember(\""+doc.id+"\")'>löschen</button><br>";
+})
 
-});
+document.getElementById("memberlist").innerHTML = html
 
-document.getElementById("memberlist").innerHTML=html;
-
-});
+})
 
 }
 
-function deleteMember(id){
 
-db.collection("members").doc(id).delete();
-
-loadMembers();
-
-}
 
 function addMusic(){
 
-let link=document.getElementById("musiclink").value;
+let link = document.getElementById("musiclink").value
 
 db.collection("music").add({
-url:link
-});
 
-loadMusic();
+url:link
+
+})
 
 }
+
+
 
 function loadMusic(){
 
-db.collection("music").onSnapshot(snapshot=>{
+db.collection("music").onSnapshot((snapshot)=>{
 
-let html="";
+let html=""
 
 snapshot.forEach(doc=>{
 
-let m=doc.data();
+let url = doc.data().url
 
-html+="<audio controls src='"+m.url+"'></audio><br>";
+html += `
+<audio controls>
+<source src="${url}" type="audio/mpeg">
+</audio>
+`
 
-});
+})
 
-document.getElementById("musiclist").innerHTML=html;
+document.getElementById("musiclist").innerHTML = html
 
-});
+})
 
 }
+
+
 
 function postInfo(){
 
-let text=document.getElementById("infotext").value;
+let text = document.getElementById("infotext").value
 
 db.collection("info").add({
+
 text:text
-});
+
+})
 
 }
+
+
 
 function loadInfo(){
 
-db.collection("info").onSnapshot(snapshot=>{
+db.collection("info").onSnapshot((snapshot)=>{
 
-let html="";
+let html=""
 
 snapshot.forEach(doc=>{
 
-html+="<p>"+doc.data().text+"</p>";
+html += "<p>"+doc.data().text+"</p>"
 
-});
+})
 
-document.getElementById("infoboard").innerHTML=html;
+document.getElementById("infoboard").innerHTML = html
 
-});
+})
 
 }
+
+
 
 function sendMessage(){
 
-let msg=document.getElementById("chatmsg").value;
+let msg = document.getElementById("chatmsg").value
 
 db.collection("chat").add({
-text:msg
-});
+
+user:currentUser,
+message:msg
+
+})
 
 }
 
+
+
 function loadChat(){
 
-db.collection("chat").onSnapshot(snapshot=>{
+db.collection("chat").orderBy("message").onSnapshot((snapshot)=>{
 
-let html="";
+let html=""
 
 snapshot.forEach(doc=>{
 
-html+="<p>"+doc.data().text+"</p>";
+let d = doc.data()
 
-});
+html += "<p><b>"+d.user+"</b>: "+d.message+"</p>"
 
-document.getElementById("chatbox").innerHTML=html;
+})
 
-});
+document.getElementById("chatbox").innerHTML = html
+
+})
 
 }
