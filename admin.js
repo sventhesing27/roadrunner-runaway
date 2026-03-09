@@ -1,4 +1,20 @@
+auth.onAuthStateChanged(user => {
 
+if(!user){
+
+window.location = "index.html"
+
+}
+
+if(user.email !== sventhesing27@gmail.com){
+
+alert("Kein Admin Zugriff")
+
+window.location = "member.html"
+
+}
+
+})
 function addSong(){
 
 let name=document.getElementById("songname").value
