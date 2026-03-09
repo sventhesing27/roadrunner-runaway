@@ -10,7 +10,7 @@ auth.signInWithEmailAndPassword(email,password)
 .then((userCredential)=>{
 
 let user = userCredential.user
-currentUser = user.email
+console.log(user.email)
 
 document.getElementById("login").style.display="none"
 
