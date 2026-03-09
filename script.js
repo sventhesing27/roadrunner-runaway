@@ -10,25 +10,32 @@ auth.signInWithEmailAndPassword(email,password)
 .then((userCredential)=>{
 
 let user = userCredential.user
-console.log(user.email)
 
 document.getElementById("login").style.display="none"
 
 if(user.email === "admin@runaway.de"){
 
+// ADMIN
 document.getElementById("adminpanel").style.display="block"
-loadMembers()
+document.getElementById("memberpanel").style.display="none"
 
 }else{
 
+// MEMBER
 document.getElementById("memberpanel").style.display="block"
-loadMusic()
-loadInfo()
-loadChat()
+document.getElementById("adminpanel").style.display="none"
 
 }
 
 })
+
+.catch((error)=>{
+
+document.getElementById("error").innerText = error.message
+
+})
+
+}
 
 .catch((error)=>{
 
