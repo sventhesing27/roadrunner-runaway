@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Roadrunner Runaway</title>
+<title>Admin Panel</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -12,19 +12,18 @@
 </head>
 <body>
 
-<div class="box">
-<h1>ROADRUNNER RUNAWAY</h1>
+<h1>Admin Panel</h1>
 
-<input id="email" placeholder="Email"><br>
-<input id="password" type="password" placeholder="Password"><br>
+<h3>Add Music</h3>
+<input id="songname" placeholder="Song Name">
+<input id="songurl" placeholder="MP3 URL">
+<button onclick="addSong()">Add Song</button>
 
-<button onclick="login()">Login</button>
-<button onclick="register()">Register</button>
+<h3>Add Information</h3>
+<input id="infotitle" placeholder="Category">
+<input id="infotext" placeholder="Text">
+<button onclick="addInfo()">Add Info</button>
 
-<p id="msg"></p>
-</div>
-
-<script src="app.js"></script>
-
+<script src="admin.js"></script>
 </body>
 </html>

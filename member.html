@@ -3,28 +3,31 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Roadrunner Runaway</title>
+<title>Member Area</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 </head>
+
 <body>
 
-<div class="box">
-<h1>ROADRUNNER RUNAWAY</h1>
+<h2>Member Area</h2>
+<button onclick="logout()">Logout</button>
 
-<input id="email" placeholder="Email"><br>
-<input id="password" type="password" placeholder="Password"><br>
+<h3>Music Player</h3>
+<audio id="player" controls autoplay></audio>
+<ul id="playlist"></ul>
 
-<button onclick="login()">Login</button>
-<button onclick="register()">Register</button>
+<h3>Information Board</h3>
+<div id="infos"></div>
 
-<p id="msg"></p>
-</div>
+<h3>Member Chat</h3>
+<div id="chatbox"></div>
+<input id="chatinput" placeholder="Write message">
+<button onclick="sendMessage()">Send</button>
 
-<script src="app.js"></script>
-
+<script src="member.js"></script>
 </body>
 </html>

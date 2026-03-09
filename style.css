@@ -1,19 +1,13 @@
+
 body{
-background-image:url("background.jpg");
-background-size:cover;
-background-position:center;
-font-family:Arial;
+background:#111;
 color:white;
+font-family:Arial;
 text-align:center;
-margin:0;
 }
 
-.panel{
-background:rgba(0,0,0,0.85);
-padding:30px;
-margin:50px auto;
-width:500px;
-border-radius:10px;
+.box{
+margin-top:100px;
 }
 
 input,button{
@@ -21,18 +15,10 @@ padding:10px;
 margin:5px;
 }
 
-audio{
-width:90%;
-margin:10px;
-}
-
-#adminpanel,#memberpanel{
-display:none;
-}
-
 #chatbox{
-height:150px;
+height:200px;
 overflow:auto;
-background:black;
+border:1px solid white;
+margin:10px;
 padding:10px;
 }
