@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shelby Management System</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="loginCard" class="card">
+<h2>Shelby System Login</h2>
+
+<input id="username" placeholder="Benutzername">
+<input id="password" type="password" placeholder="Passwort">
+
+<button id="loginBtn">Login</button>
+<p id="errorMsg"></p>
+</div>
+
+
+<div id="dashboard" style="display:none">
+
+<header>
+<h1>Shelby Management</h1>
+<nav id="navLinks"></nav>
+<button onclick="logout()">Logout</button>
+</header>
+
+
+<section id="inventory" class="section">
+
+<h2>Inventar</h2>
+
+<div class="formRow">
+<select id="invEmployee"></select>
+<input id="material" placeholder="Material">
+<input id="quantity" type="number" placeholder="Menge">
+<input id="price" type="number" placeholder="Preis">
+<button id="addInv">Hinzufügen</button>
+</div>
+
+<table id="entriesTable">
+<thead>
+<tr>
+<th>Mitarbeiter</th>
+<th>Material</th>
+<th>Menge</th>
+<th>Preis</th>
+<th>Gesamt</th>
+<th>Aktion</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+</section>
+
+
+<section id="orders" class="section" style="display:none">
+
+<h2>Aufträge</h2>
+
+<div class="formRow">
+<input id="orderClient" placeholder="Kunde">
+<input id="orderItem" placeholder="Artikel">
+<input id="orderDate" type="date">
+<input id="orderDue" type="date">
+<button id="addOrder">Auftrag hinzufügen</button>
+</div>
+
+<table id="orderTable">
+<thead>
+<tr>
+<th>Kunde</th>
+<th>Artikel</th>
+<th>Startdatum</th>
+<th>Fällig</th>
+<th>Aktion</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+</section>
+
+
+<section id="payouts" class="section" style="display:none">
+
+<h2>Auszahlungen</h2>
+
+<div class="formRow">
+<select id="payEmployee"></select>
+<input id="amount" type="number" placeholder="Betrag">
+<input id="date" type="date">
+<button id="addPay">Auszahlung hinzufügen</button>
+</div>
+
+<table id="payoutTable">
+<thead>
+<tr>
+<th>Datum</th>
+<th>Mitarbeiter</th>
+<th>Betrag</th>
+<th>Aktion</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+</section>
+
+
+<section id="history" class="section" style="display:none">
+
+<h2>History</h2>
+
+<table id="historyTable">
+<thead>
+<tr>
+<th>Datum</th>
+<th>Aktion</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+</section>
+
+
+<section id="staff" class="section" style="display:none">
+
+<h2>Mitarbeiter</h2>
+
+<div class="formRow">
+<input id="newEmployee" placeholder="Neuer Mitarbeiter">
+<button id="addStaff">Hinzufügen</button>
+</div>
+
+<table id="staffTable">
+<thead>
+<tr>
+<th>Name</th>
+<th>Aktion</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+</section>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
