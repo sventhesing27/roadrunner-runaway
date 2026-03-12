@@ -3,7 +3,7 @@ window.onload = function(){
 
 const accounts=[
 {user:'admin',pass:'shelby123',role:'admin'},
-{user:'mitarbeiter',pass:'1234',role:'mitarbeiter'},
+{user:'mitarbeiter',pass:'Cornelia_1',role:'mitarbeiter'},
 {user:'verwalter',pass:'verwalter123',role:'verwalter'}
 ];
 
