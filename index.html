@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roadrunner Runaways</title>
+<title>Shelby Management System</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div id="loginCard" class="card">
-<h2>Herzlich Willkommen</h2>
+<h2>Shelby System Login</h2>
 
 <input id="username" placeholder="Benutzername">
 <input id="password" type="password" placeholder="Passwort">
@@ -20,18 +19,15 @@
 <p id="errorMsg"></p>
 </div>
 
-
 <div id="dashboard" style="display:none">
 
 <header>
-<h1>Roadrunner Runaways</h1>
+<h1>Shelby Management</h1>
 <nav id="navLinks"></nav>
 <button onclick="logout()">Logout</button>
 </header>
 
-
 <section id="inventory" class="section">
-
 <h2>Inventar</h2>
 
 <div class="formRow">
@@ -55,12 +51,9 @@
 </thead>
 <tbody></tbody>
 </table>
-
 </section>
 
-
 <section id="orders" class="section" style="display:none">
-
 <h2>Aufträge</h2>
 
 <div class="formRow">
@@ -83,12 +76,9 @@
 </thead>
 <tbody></tbody>
 </table>
-
 </section>
 
-
 <section id="payouts" class="section" style="display:none">
-
 <h2>Auszahlungen</h2>
 
 <div class="formRow">
@@ -109,14 +99,10 @@
 </thead>
 <tbody></tbody>
 </table>
-
 </section>
 
-
 <section id="history" class="section" style="display:none">
-
 <h2>History</h2>
-
 <table id="historyTable">
 <thead>
 <tr>
@@ -127,19 +113,14 @@
 </thead>
 <tbody></tbody>
 </table>
-
 </section>
 
-
 <section id="staff" class="section" style="display:none">
-
 <h2>Mitarbeiter</h2>
-
 <div class="formRow">
 <input id="newEmployee" placeholder="Neuer Mitarbeiter">
 <button id="addStaff">Hinzufügen</button>
 </div>
-
 <table id="staffTable">
 <thead>
 <tr>
@@ -149,12 +130,29 @@
 </thead>
 <tbody></tbody>
 </table>
+</section>
 
+<section id="links" class="section" style="display:none">
+<h2>Nützliche Links</h2>
+<div class="formRow">
+<input id="linkName" placeholder="Name">
+<input id="linkURL" placeholder="URL (https://...)">
+<button id="addLink">Hinzufügen</button>
+</div>
+<table id="linksTable">
+<thead>
+<tr>
+<th>Name</th>
+<th>Link</th>
+<th>Aktion</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 </section>
 
 </div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
