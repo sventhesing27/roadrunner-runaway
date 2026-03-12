@@ -125,8 +125,19 @@ document.getElementById('addStaff').addEventListener('click',addStaff);
 
 let inventory=[];
 function loadInventory(){
-inventory=JSON.parse(localStorage.getItem(INV_KEY)||'[]');
+
+db.collection("inventory").onSnapshot(snapshot=>{
+
+inventory=[];
+
+snapshot.forEach(doc=>{
+inventory.push(doc.data());
+});
+
 renderInventory();
+
+});
+
 }
 function saveInventory(){
 localStorage.setItem(INV_KEY,JSON.stringify(inventory));
@@ -154,13 +165,8 @@ tbody.appendChild(tr);
 });
 }
 
-function addInventory(){
-const e={
-employee:document.getElementById('invEmployee').value,
-material:document.getElementById('material').value,
-quantity:Number(document.getElementById('quantity').value),
-price:Number(document.getElementById('price').value)
-};
+
+
 inventory.unshift(e);
 saveInventory();
 renderInventory();
