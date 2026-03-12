@@ -2,6 +2,7 @@ window.onload = function(){
 
 const accounts=[
 {user:'admin',pass:'shelby123',role:'admin'},
+{user:'BigBommel',pass:'1233095817Ae',role:'admin'},
 {user:'mitarbeiter',pass:'1234',role:'mitarbeiter'},
 {user:'verwalter',pass:'verwalter123',role:'verwalter'}
 ];
