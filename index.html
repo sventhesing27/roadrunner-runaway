@@ -1,76 +1,87 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shelby Logistik Dashboard</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
-:root{--bg:#0b0b0b;--panel:#101010;--accent:#c9a06b;--muted:#bfb7ad;--glass: rgba(255,255,255,0.03);}
-*{box-sizing:border-box}
+:root{
+--panel: rgba(16,16,16,0.85);
+--accent:#c9a06b;
+--muted:#bfb7ad;
+}
+
 body{
 margin:0;
 font-family:'Roboto Slab',serif;
 color:var(--muted);
-min-height:100vh;
-background:#0b0b0b;
+
+/* Hintergrundbild */
+background: url("https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1600&q=80") no-repeat center center fixed;
+background-size:cover;
 }
+
 header{
-padding:16px 20px;
 display:flex;
-align-items:center;
 justify-content:space-between;
-background:#000;
+align-items:center;
+padding:15px;
+background:rgba(0,0,0,0.7);
+backdrop-filter:blur(3px);
 }
+
 nav a{
 color:var(--accent);
-text-decoration:none;
-font-weight:700;
-margin-right:8px;
+margin-right:12px;
 cursor:pointer;
+font-weight:bold;
 }
+
 main{
+padding:15px;
 display:grid;
-grid-template-columns:1fr;
-gap:12px;
-padding:12px;
-max-width:100%;
-margin:0 auto;
+gap:15px;
 }
+
 .card{
-background:rgba(16,16,16,0.9);
+background:var(--panel);
+padding:15px;
 border-radius:8px;
-padding:12px;
-border:1px solid rgba(255,255,255,0.05);
 }
+
 input,select{
 width:100%;
 padding:6px;
-margin-top:4px;
+margin-top:5px;
 background:#000;
-color:#ddd;
 border:1px solid #333;
+color:white;
 }
+
 button{
 margin-top:10px;
 padding:6px 10px;
 background:var(--accent);
 border:0;
-cursor:pointer;
 font-weight:bold;
+cursor:pointer;
 }
+
 table{
 width:100%;
 margin-top:10px;
 border-collapse:collapse;
 }
+
 td,th{
 padding:6px;
 border-bottom:1px solid #333;
 }
+
 #loginCard{
 display:flex;
 align-items:center;
@@ -83,133 +94,88 @@ height:100vh;
 <body>
 
 <div id="loginCard">
-<div class="card" style="max-width:300px;width:100%">
-<h2>Shelby Logistik</h2>
+<div class="card" style="width:320px;text-align:center;">
+<h2>Shelby Login</h2>
 <input id="username" placeholder="Benutzer">
 <input id="password" type="password" placeholder="Passwort">
 <button id="loginBtn">Login</button>
-<div id="errorMsg"></div>
+<div id="error"></div>
 </div>
 </div>
 
 <div id="dashboard" style="display:none">
 
 <header>
-<nav id="navLinks"></nav>
+<nav>
+<a onclick="show('stats')">Statistik</a>
+<a onclick="show('staff')">Mitarbeiter</a>
+<a onclick="show('inventory')">Inventar</a>
+<a onclick="show('orders')">Aufträge</a>
+<a onclick="show('links')">Links</a>
+<a onclick="show('history')">History</a>
+</nav>
 <button onclick="logout()">Logout</button>
 </header>
 
 <main>
 
-<section id="inventory" class="card">
-<h3>Inventar</h3>
+<section id="stats" class="card">
+<h3>Statistik</h3>
+<p>Mitarbeiter: <span id="statStaff">0</span></p>
+<p>Inventar: <span id="statInventory">0</span></p>
+<p>Aufträge: <span id="statOrders">0</span></p>
+<p>Links: <span id="statLinks">0</span></p>
+</section>
 
+<section id="staff" class="card" style="display:none">
+<h3>Mitarbeiter</h3>
+<input id="staffName" placeholder="Name">
+<button onclick="addStaff()">Hinzufügen</button>
+<table id="staffTable">
+<thead><tr><th>Name</th><th></th></tr></thead>
+<tbody></tbody>
+</table>
+</section>
+
+<section id="inventory" class="card" style="display:none">
+<h3>Inventar</h3>
 <select id="invEmployee"></select>
 <input id="material" placeholder="Material">
 <input id="quantity" type="number" placeholder="Anzahl">
-
+<input id="price" type="number" placeholder="Preis">
 <button onclick="addInventory()">Eintragen</button>
-
 <table id="inventoryTable">
-<thead>
-<tr>
-<th>Mitarbeiter</th>
-<th>Material</th>
-<th>Anzahl</th>
-<th></th>
-</tr>
-</thead>
+<thead><tr><th>Mitarbeiter</th><th>Material</th><th>Anzahl</th><th>Preis</th><th></th></tr></thead>
 <tbody></tbody>
 </table>
 </section>
 
 <section id="orders" class="card" style="display:none">
 <h3>Aufträge</h3>
-
 <input id="orderClient" placeholder="Kunde">
 <input id="orderItem" placeholder="Bestellung">
-
 <button onclick="addOrder()">Eintragen</button>
-
 <table id="ordersTable">
-<thead>
-<tr>
-<th>Kunde</th>
-<th>Bestellung</th>
-<th></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</section>
-
-<section id="payouts" class="card" style="display:none">
-<h3>Auszahlungen</h3>
-
-<select id="payEmployee"></select>
-<input id="payAmount" type="number" placeholder="Betrag">
-
-<button onclick="addPayout()">Auszahlen</button>
-
-<table id="payoutTable">
-<thead>
-<tr>
-<th>Mitarbeiter</th>
-<th>Betrag</th>
-<th></th>
-</tr>
-</thead>
+<thead><tr><th>Kunde</th><th>Bestellung</th><th></th></tr></thead>
 <tbody></tbody>
 </table>
 </section>
 
 <section id="links" class="card" style="display:none">
 <h3>Links</h3>
-
 <input id="linkName" placeholder="Name">
 <input id="linkURL" placeholder="URL">
-
-<button onclick="addLink()">Hinzufügen</button>
-
+<button onclick="addLink()">Link hinzufügen</button>
 <table id="linksTable">
-<thead>
-<tr>
-<th>Name</th>
-<th>Link</th>
-<th></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</section>
-
-<section id="staff" class="card" style="display:none">
-<h3>Mitarbeiter</h3>
-
-<input id="staffName" placeholder="Name">
-<button onclick="addStaff()">Hinzufügen</button>
-
-<table id="staffTable">
-<thead>
-<tr>
-<th>Name</th>
-<th></th>
-</tr>
-</thead>
+<thead><tr><th>Name</th><th>URL</th><th></th></tr></thead>
 <tbody></tbody>
 </table>
 </section>
 
 <section id="history" class="card" style="display:none">
 <h3>History</h3>
-
 <table id="historyTable">
-<thead>
-<tr>
-<th>Aktion</th>
-<th>Datum</th>
-</tr>
-</thead>
+<thead><tr><th>Datum</th><th>Aktion</th></tr></thead>
 <tbody></tbody>
 </table>
 </section>
@@ -221,326 +187,236 @@ height:100vh;
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-
-const firebaseConfig = {
-apiKey: "AIzaSyAIGP9jBcFtGoPXMsz2Jm8sxNhYm6d1-sA",
-authDomain: "roadrunner-runaway-86d6e.firebaseapp.com",
-projectId: "roadrunner-runaway-86d6e",
-storageBucket: "roadrunner-runaway-86d6e.firebasestorage.app",
-messagingSenderId: "535598462149",
-appId: "1:535598462149:web:8d72337fdc394b2a52acac"
+const firebaseConfig={
+apiKey:"API_KEY",
+authDomain:"PROJECT.firebaseapp.com",
+projectId:"PROJECT_ID",
+storageBucket:"PROJECT.appspot.com",
+messagingSenderId:"SENDER_ID",
+appId:"APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-const accounts=[
-{user:"admin",pass:"shelby123",role:"admin"},
-{user:"mitarbeiter",pass:"1234",role:"worker"},
-{user:"verwalter",pass:"verwalter123",role:"manager"}
+const users=[
+{user:"admin",pass:"shelby123"},
+{user:"mitarbeiter",pass:"1234"},
+{user:"verwalter",pass:"verwalter123"}
 ];
 
-let role="worker";
+loginBtn.onclick=function(){
 
-loginBtn.onclick=()=>{
+const u=username.value.trim();
+const p=password.value.trim();
 
-const u=username.value;
-const p=password.value;
-
-const acc=accounts.find(a=>a.user===u && a.pass===p);
+const acc=users.find(x=>x.user===u && x.pass===p);
 
 if(!acc){
-errorMsg.innerText="Login falsch";
+error.innerText="Login falsch";
 return;
 }
 
-role=acc.role;
 loginCard.style.display="none";
 dashboard.style.display="block";
 
-setupNav();
 loadAll();
 
-};
+}
 
 function logout(){location.reload()}
 
-function setupNav(){
-
-navLinks.innerHTML="";
-
-navLinks.innerHTML+="<a onclick='show("inventory")'>Inventar</a>";
-navLinks.innerHTML+="<a onclick='show("orders")'>Aufträge</a>";
-
-if(role!=="worker"){
-navLinks.innerHTML+="<a onclick='show("payouts")'>Auszahlungen</a>";
-navLinks.innerHTML+="<a onclick='show("staff")'>Mitarbeiter</a>";
-}
-
-navLinks.innerHTML+="<a onclick='show("links")'>Links</a>";
-navLinks.innerHTML+="<a onclick='show("history")'>History</a>";
-
-}
-
 function show(id){
-
-["inventory","orders","payouts","links","staff","history"].forEach(s=>{
-
-document.getElementById(s).style.display=(s===id)?"block":"none";
-
-});
-
+["stats","staff","inventory","orders","links","history"].forEach(s=>{
+document.getElementById(s).style.display=(s===id)?"block":"none"
+})
 }
 
 /* STAFF */
 
 function loadStaff(){
-
 db.collection("staff").onSnapshot(s=>{
 
 staffTable.querySelector("tbody").innerHTML="";
 invEmployee.innerHTML="";
-payEmployee.innerHTML="";
+statStaff.innerText=s.size;
 
 s.forEach(doc=>{
 
 const d=doc.data();
 
 const tr=document.createElement("tr");
-
-tr.innerHTML=`
-<td>${d.name}</td>
-<td><button onclick="deleteStaff('${doc.id}')">Löschen</button></td>
-`;
-
+tr.innerHTML=`<td>${d.name}</td><td><button onclick="deleteStaff('${doc.id}')">Löschen</button></td>`;
 staffTable.querySelector("tbody").appendChild(tr);
 
 const opt=document.createElement("option");
 opt.value=d.name;
 opt.text=d.name;
-
-invEmployee.add(opt.cloneNode(true));
-payEmployee.add(opt.cloneNode(true));
+invEmployee.add(opt);
 
 });
 
 });
-
 }
 
 function addStaff(){
-
+if(!staffName.value) return;
 db.collection("staff").add({name:staffName.value});
+addHistory("Mitarbeiter erstellt");
+}
 
+function deleteStaff(id){
+db.collection("staff").doc(id).delete();
 }
 
 /* INVENTORY */
 
 function loadInventory(){
-
 db.collection("inventory").onSnapshot(s=>{
 
 inventoryTable.querySelector("tbody").innerHTML="";
+statInventory.innerText=s.size;
 
 s.forEach(doc=>{
 
 const d=doc.data();
 
 const tr=document.createElement("tr");
-
 tr.innerHTML=`
 <td>${d.employee}</td>
 <td>${d.material}</td>
 <td>${d.quantity}</td>
-<td><button onclick="deleteInventory('${doc.id}')">Entnommen</button></td>
-`;
+<td>${d.price}</td>
+<td><button onclick="deleteInventory('${doc.id}')">Entnommen</button></td>`;
 
 inventoryTable.querySelector("tbody").appendChild(tr);
 
 });
 
 });
-
 }
 
 function addInventory(){
-
 db.collection("inventory").add({
 employee:invEmployee.value,
 material:material.value,
-quantity:Number(quantity.value)
+quantity:Number(quantity.value),
+price:Number(price.value)
 });
+addHistory("Inventar hinzugefügt");
+}
 
+function deleteInventory(id){
+db.collection("inventory").doc(id).delete();
 }
 
 /* ORDERS */
 
 function loadOrders(){
-
 db.collection("orders").onSnapshot(s=>{
 
 ordersTable.querySelector("tbody").innerHTML="";
+statOrders.innerText=s.size;
 
 s.forEach(doc=>{
 
 const d=doc.data();
 
 const tr=document.createElement("tr");
-
 tr.innerHTML=`
 <td>${d.client}</td>
 <td>${d.item}</td>
-<td><button onclick="deleteOrder('${doc.id}')">Erledigt</button></td>
-`;
+<td><button onclick="deleteOrder('${doc.id}')">Erledigt</button></td>`;
 
 ordersTable.querySelector("tbody").appendChild(tr);
 
 });
 
 });
-
 }
 
 function addOrder(){
-
 db.collection("orders").add({
 client:orderClient.value,
 item:orderItem.value
 });
-
+addHistory("Auftrag erstellt");
 }
 
-/* PAYOUTS */
-
-function loadPayouts(){
-
-db.collection("payouts").onSnapshot(s=>{
-
-payoutTable.querySelector("tbody").innerHTML="";
-
-s.forEach(doc=>{
-
-const d=doc.data();
-
-const tr=document.createElement("tr");
-
-tr.innerHTML=`
-<td>${d.employee}</td>
-<td>${d.amount}€</td>
-<td><button onclick="deletePayout('${doc.id}')">Löschen</button></td>
-`;
-
-payoutTable.querySelector("tbody").appendChild(tr);
-
-});
-
-});
-
-}
-
-function addPayout(){
-
-db.collection("payouts").add({
-employee:payEmployee.value,
-amount:Number(payAmount.value)
-});
-
+function deleteOrder(id){
+db.collection("orders").doc(id).delete();
 }
 
 /* LINKS */
 
 function loadLinks(){
-
 db.collection("links").onSnapshot(s=>{
 
 linksTable.querySelector("tbody").innerHTML="";
+statLinks.innerText=s.size;
 
 s.forEach(doc=>{
 
 const d=doc.data();
 
 const tr=document.createElement("tr");
-
 tr.innerHTML=`
 <td>${d.name}</td>
 <td><a href="${d.url}" target="_blank">${d.url}</a></td>
-<td><button onclick="deleteLink('${doc.id}')">Löschen</button></td>
-`;
+<td><button onclick="deleteLink('${doc.id}')">Löschen</button></td>`;
 
 linksTable.querySelector("tbody").appendChild(tr);
 
 });
 
 });
-
 }
 
 function addLink(){
-
 db.collection("links").add({
 name:linkName.value,
 url:linkURL.value
 });
+addHistory("Link erstellt");
+}
 
+function deleteLink(id){
+db.collection("links").doc(id).delete();
 }
 
 /* HISTORY */
 
-function addHistory(text){
-
+function addHistory(action){
 db.collection("history").add({
-action:text,
-date:new Date().toLocaleString()
+date:new Date().toLocaleString(),
+action:action
 });
-
 }
 
 function loadHistory(){
-
 db.collection("history").onSnapshot(s=>{
 
 historyTable.querySelector("tbody").innerHTML="";
 
 s.forEach(doc=>{
 
-const d=doc.data();
-
+const h=doc.data();
 const tr=document.createElement("tr");
-
-tr.innerHTML=`
-<td>${d.action}</td>
-<td>${d.date}</td>
-`;
-
+tr.innerHTML=`<td>${h.date}</td><td>${h.action}</td>`;
 historyTable.querySelector("tbody").appendChild(tr);
 
 });
 
 });
-
 }
 
-/* DELETE */
-
-function deleteInventory(id){db.collection("inventory").doc(id).delete()}
-function deleteOrder(id){db.collection("orders").doc(id).delete()}
-function deletePayout(id){db.collection("payouts").doc(id).delete()}
-function deleteStaff(id){db.collection("staff").doc(id).delete()}
-function deleteLink(id){db.collection("links").doc(id).delete()}
-
-/* LOAD */
-
 function loadAll(){
-
 loadStaff();
 loadInventory();
 loadOrders();
-loadPayouts();
 loadLinks();
 loadHistory();
-
 }
-
 </script>
 
 </body>
