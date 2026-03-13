@@ -1,79 +1,11 @@
 body{
-font-family:Arial, Helvetica, sans-serif;
-background-image:url("background.jpg");
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-background-attachment:fixed;
+font-family:Arial;
+background:#1e1e1e;
 color:white;
-margin:0;
-padding:0;
+text-align:center;
 }
-
-header{
-background:#111;
-padding:15px;
-display:flex;
-align-items:center;
-gap:20px;
-}
-
-nav a{
-margin-right:15px;
-cursor:pointer;
-color:#00c3ff;
-font-weight:bold;
-}
-
-.card{
-width:320px;
-margin:120px auto;
-padding:20px;
-background:#2b2b2b;
-border-radius:8px;
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.section{
-padding:20px;
-}
-
-input,select{
-padding:6px;
-}
-
-button{
-padding:6px 12px;
-cursor:pointer;
-}
-
-.secondary{
-background:#444;
-color:white;
-border:none;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:15px;
-}
-
-td,th{
-border:1px solid #444;
-padding:8px;
-}
-
-.overdue{
-color:red;
-font-weight:bold;
-}
-
-.formRow{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-bottom:10px;
-}
+.login-card{margin-top:150px;}
+input{padding:10px;margin:5px;}
+button{padding:10px 20px;margin:5px;cursor:pointer;}
+table{margin:auto;margin-top:20px;border-collapse:collapse;}
+th,td{border:1px solid white;padding:10px;}
