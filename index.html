@@ -219,11 +219,14 @@ error.innerText="Login falsch";
 return;
 }
 
+currentRole = acc.role;
+
 loginCard.style.display="none";
 dashboard.style.display="block";
 
-loadAll();
+setupPermissions();
 
+loadAll();
 }
 
 function logout(){location.reload()}
@@ -268,7 +271,14 @@ addHistory("Mitarbeiter erstellt");
 }
 
 function deleteStaff(id){
+
+if(currentRole !== "admin"){
+alert("Nur Admin darf löschen");
+return;
+}
+
 db.collection("staff").doc(id).delete();
+
 }
 
 /* INVENTORY */
@@ -309,7 +319,14 @@ addHistory("Inventar hinzugefügt");
 }
 
 function deleteInventory(id){
+
+if(currentRole !== "admin"){
+alert("Nur Admin darf löschen");
+return;
+}
+
 db.collection("inventory").doc(id).delete();
+
 }
 
 /* ORDERS */
@@ -346,7 +363,14 @@ addHistory("Auftrag erstellt");
 }
 
 function deleteOrder(id){
+
+if(currentRole !== "admin"){
+alert("Nur Admin darf löschen");
+return;
+}
+
 db.collection("orders").doc(id).delete();
+
 }
 
 /* LINKS */
@@ -383,7 +407,14 @@ addHistory("Link erstellt");
 }
 
 function deleteLink(id){
+
+if(currentRole !== "admin"){
+alert("Nur Admin darf löschen");
+return;
+}
+
 db.collection("links").doc(id).delete();
+
 }
 
 /* HISTORY */
@@ -410,6 +441,23 @@ historyTable.querySelector("tbody").appendChild(tr);
 });
 
 });
+}
+
+function setupPermissions(){
+
+if(currentRole === "pilot"){
+
+document.querySelector("a[onclick=\"show('staff')\"]").style.display="none";
+document.querySelector("a[onclick=\"show('history')\"]").style.display="none";
+
+}
+
+if(currentRole === "verwalter"){
+
+document.querySelector("a[onclick=\"show('staff')\"]").style.display="none";
+
+}
+
 }
 
 function loadAll(){
