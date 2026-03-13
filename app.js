@@ -1,8 +1,8 @@
 
 const accounts=[
-{user:'admin',pass:'shelby123'},
-{user:'mitarbeiter',pass:'1234'},
-{user:'verwalter',pass:'verwalter123'}
+{user:'Admin',pass:'Run'},
+{user:'Pilot',pass:'0815'},
+{user:'Verwalter',pass:'FDH'}
 ];
 
 document.getElementById('loginBtn').addEventListener('click',()=>{
