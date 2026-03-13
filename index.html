@@ -1,78 +1,77 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<title>Shelby System (Firebase)</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shelby Logistik Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0b;--panel:#101010;--accent:#c9a06b;--muted:#bfb7ad;--glass: rgba(255,255,255,0.03);}
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:'Roboto Slab',serif;
+color:var(--muted);
+min-height:100vh;
+background:url("dashboard-bg.jpg") center/cover no-repeat fixed;
+}
+header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.03);background: rgba(0,0,0,0.5);}
+nav a{color:var(--accent);text-decoration:none;font-weight:700;margin-right:8px;cursor:pointer;font-size:13px;}
+main{display:grid;grid-template-columns:1fr;gap:12px;padding:12px;max-width:100%;margin:0 auto;}
+.card{background: rgba(16,16,16,0.85);border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,0.03);}
+input,select{width:100%;padding:6px;margin-top:4px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:var(--muted);}
+button{margin-top:10px;padding:6px 10px;border-radius:6px;border:0;background:var(--accent);color:#0b0b0b;font-weight:700;cursor:pointer;font-size:13px}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
+th,td{padding:6px;text-align:left;border-bottom:1px dashed rgba(255,255,255,0.1)}
+th{color:var(--accent)}
+#loginCard{display:flex;justify-content:center;align-items:center;height:100vh}
+</style>
 </head>
+
 <body>
 
-<div id="loginCard" class="login-card">
-<h2>Login</h2>
+<div id="loginCard">
+<div class="card" style="max-width:300px;width:100%;text-align:center">
+<h2>Shelby Logistik</h2>
 <input id="username" placeholder="Benutzername">
 <input id="password" type="password" placeholder="Passwort">
 <button id="loginBtn">Login</button>
-<p id="errorMsg"></p>
+<div id="errorMsg"></div>
+</div>
 </div>
 
 <div id="dashboard" style="display:none">
-<h1>Dashboard</h1>
 
-<nav>
-<button onclick="showSection('inventory')">Inventar</button>
-<button onclick="showSection('orders')">Aufträge</button>
-<button onclick="showSection('staff')">Mitarbeiter</button>
-</nav>
+<header>
+<nav id="navLinks"></nav>
+<button onclick="logout()">Logout</button>
+</header>
 
-<section id="inventory">
-<h2>Inventar</h2>
-<select id="invEmployee"></select>
-<input id="material" placeholder="Material">
-<input id="quantity" type="number" placeholder="Menge">
-<input id="price" type="number" placeholder="Preis">
-<button id="addInv">Hinzufügen</button>
+<main>
 
-<table id="entriesTable">
+<section id="inventory" class="card">
+<h3>Inventar</h3>
+<p>Daten werden über Firebase gespeichert.</p>
+</section>
+
+<section id="links" class="card" style="display:none">
+<h3>Links</h3>
+
+<input id="linkName" placeholder="Name">
+<input id="linkURL" placeholder="https://seite.de">
+<button id="addLink">Hinzufügen</button>
+
+<table id="linksTable">
 <thead>
-<tr>
-<th>Mitarbeiter</th>
-<th>Material</th>
-<th>Menge</th>
-<th>Preis</th>
-</tr>
+<tr><th>Name</th><th>Link</th><th>Aktion</th></tr>
 </thead>
 <tbody></tbody>
 </table>
+
 </section>
 
-<section id="orders" style="display:none">
-<h2>Aufträge</h2>
-<input id="orderClient" placeholder="Kunde">
-<input id="orderItem" placeholder="Auftrag">
-<button id="addOrder">Hinzufügen</button>
-
-<table id="orderTable">
-<thead>
-<tr>
-<th>Kunde</th>
-<th>Auftrag</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</section>
-
-<section id="staff" style="display:none">
-<h2>Mitarbeiter</h2>
-<input id="newEmployee" placeholder="Name">
-<button id="addStaff">Hinzufügen</button>
-
-<table id="staffTable">
-<thead><tr><th>Name</th></tr></thead>
-<tbody></tbody>
-</table>
-</section>
-
+</main>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
