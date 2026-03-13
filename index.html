@@ -9,19 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
-:root{
---accent:#c9a06b;
---muted:#d6d1c9;
-}
-
 body{
 margin:0;
 font-family:'Roboto Slab',serif;
-color:var(--muted);
 background-image:url("background.jpg");
 background-size:cover;
 background-position:center;
-background-attachment:fixed;
+color:#ddd;
 }
 
 header{
@@ -29,14 +23,13 @@ background:rgba(0,0,0,0.75);
 padding:15px;
 display:flex;
 justify-content:space-between;
-align-items:center;
 }
 
 nav a{
 margin-right:12px;
 cursor:pointer;
+color:#c9a06b;
 font-weight:bold;
-color:var(--accent);
 }
 
 main{
@@ -60,20 +53,20 @@ margin-top:5px;
 button{
 margin-top:10px;
 padding:6px 10px;
+background:#c9a06b;
 border:0;
-background:var(--accent);
 cursor:pointer;
 }
 
 table{
 width:100%;
-border-collapse:collapse;
 margin-top:10px;
+border-collapse:collapse;
 }
 
 td,th{
-border-bottom:1px solid #444;
 padding:6px;
+border-bottom:1px solid #444;
 }
 
 #loginCard{
@@ -82,7 +75,6 @@ align-items:center;
 justify-content:center;
 height:100vh;
 }
-
 </style>
 </head>
 
@@ -112,11 +104,9 @@ height:100vh;
 <p>Mitarbeiter: <span id="statStaff">0</span></p>
 <p>Inventar: <span id="statInventory">0</span></p>
 <p>Links: <span id="statLinks">0</span></p>
-<p>Auszahlungen: <span id="statPayouts">0</span></p>
 </section>
 
 <section id="staff" class="card" style="display:none">
-
 <h3>Mitarbeiter Verwaltung</h3>
 
 <input id="newEmployee" placeholder="Name">
@@ -140,11 +130,9 @@ height:100vh;
 </thead>
 <tbody></tbody>
 </table>
-
 </section>
 
 <section id="inventory" class="card" style="display:none">
-
 <h3>Inventar</h3>
 
 <select id="invEmployee"></select>
@@ -165,11 +153,9 @@ height:100vh;
 </thead>
 <tbody></tbody>
 </table>
-
 </section>
 
 <section id="links" class="card" style="display:none">
-
 <h3>Links</h3>
 
 <input id="linkName" placeholder="Name">
@@ -187,68 +173,9 @@ height:100vh;
 </thead>
 <tbody></tbody>
 </table>
-
-</section>
-
-<section id="station" class="card" style="display:none">
-
-<h3>Station Bau</h3>
-
-<input id="stationName" placeholder="Station">
-<input id="stationBuilder" placeholder="Builder">
-
-<button id="addStation">Start</button>
-
-<table id="stationTable">
-<thead>
-<tr>
-<th>Station</th>
-<th>Builder</th>
-<th>Status</th>
-<th></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-
-</section>
-
-<section id="payouts" class="card" style="display:none">
-
-<h3>Mitarbeiter Auszahlung</h3>
-
-<select id="payEmployee"></select>
-<input id="payAmount" type="number" placeholder="Betrag">
-
-<button id="addPayout">Auszahlen</button>
-
-<table id="payoutTable">
-<thead>
-<tr>
-<th>Mitarbeiter</th>
-<th>Betrag</th>
-<th>Datum</th>
-<th></th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-
-</section>
-
-<section id="konto" class="card" style="display:none">
-
-<h3>Kontostand</h3>
-
-<input id="kontoValue" placeholder="Neuer Betrag">
-<button id="saveKonto">Speichern</button>
-
-<h2 id="kontoDisplay">0 €</h2>
-
 </section>
 
 <section id="history" class="card" style="display:none">
-
 <h3>History</h3>
 
 <table id="historyTable">
@@ -261,7 +188,6 @@ height:100vh;
 </thead>
 <tbody></tbody>
 </table>
-
 </section>
 
 </main>
@@ -273,12 +199,12 @@ height:100vh;
 <script>
 
 const firebaseConfig = {
-apiKey: "AIzaSyAIGP9jBcFtGoPXMsz2Jm8sxNhYm6d1-sA",
-authDomain: "roadrunner-runaway-86d6e.firebaseapp.com",
-projectId: "roadrunner-runaway-86d6e",
-storageBucket: "roadrunner-runaway-86d6e.firebasestorage.app",
-messagingSenderId: "535598462149",
-appId: "1:535598462149:web:8d72337fdc394b2a52acac"
+apiKey: "PASTE_API_KEY",
+authDomain: "PASTE_AUTH_DOMAIN",
+projectId: "PASTE_PROJECT_ID",
+storageBucket: "PASTE_STORAGE",
+messagingSenderId: "PASTE_SENDER",
+appId: "PASTE_APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -290,7 +216,7 @@ const accounts=[
 {user:'verwalter',pass:'verwalter123'}
 ];
 
-let currentRole="viewer";
+let currentRole="viewer"
 
 loginBtn.onclick=()=>{
 
@@ -321,7 +247,7 @@ function loadRole(user){
 db.collection("roles").doc(user).get().then(doc=>{
 
 if(doc.exists){
-currentRole = doc.data().role
+currentRole=doc.data().role
 }
 
 setupNav()
@@ -337,20 +263,17 @@ navLinks.innerHTML=""
 navLinks.innerHTML+="<a onclick=\"showSection('stats')\">Statistik</a>"
 navLinks.innerHTML+="<a onclick=\"showSection('inventory')\">Inventar</a>"
 navLinks.innerHTML+="<a onclick=\"showSection('links')\">Links</a>"
-navLinks.innerHTML+="<a onclick=\"showSection('station')\">Station</a>"
 navLinks.innerHTML+="<a onclick=\"showSection('history')\">History</a>"
 
 if(currentRole==="admin"||currentRole==="manager"){
 navLinks.innerHTML+="<a onclick=\"showSection('staff')\">Mitarbeiter</a>"
-navLinks.innerHTML+="<a onclick=\"showSection('payouts')\">Auszahlungen</a>"
-navLinks.innerHTML+="<a onclick=\"showSection('konto')\">Konto</a>"
 }
 
 }
 
 function showSection(id){
 
-["stats","staff","inventory","links","station","payouts","konto","history"].forEach(s=>{
+["stats","staff","inventory","links","history"].forEach(s=>{
 
 const el=document.getElementById(s)
 if(el) el.style.display=(s===id)?"block":"none"
@@ -367,7 +290,6 @@ db.collection("staff").onSnapshot(s=>{
 
 staffTable.querySelector("tbody").innerHTML=""
 invEmployee.innerHTML=""
-payEmployee.innerHTML=""
 
 let count=0
 
@@ -391,7 +313,6 @@ opt.text=d.name
 opt.value=d.name
 
 invEmployee.add(opt)
-payEmployee.add(opt.cloneNode(true))
 
 })
 
@@ -414,14 +335,6 @@ role:role
 db.collection("roles").doc(name).set({
 role:role
 })
-
-newEmployee.value=""
-
-}
-
-function deleteStaff(id){
-
-db.collection("staff").doc(id).delete()
 
 }
 
@@ -467,15 +380,6 @@ material:material.value,
 quantity:Number(quantity.value)
 })
 
-material.value=""
-quantity.value=""
-
-}
-
-function deleteInventory(id){
-
-db.collection("inventory").doc(id).delete()
-
 }
 
 /* LINKS */
@@ -520,20 +424,59 @@ url:linkURL.value
 
 }
 
+/* HISTORY */
+
+function loadHistory(){
+
+db.collection("history").onSnapshot(s=>{
+
+historyTable.querySelector("tbody").innerHTML=""
+
+s.forEach(doc=>{
+
+const d=doc.data()
+
+const tr=document.createElement("tr")
+
+tr.innerHTML=`
+<td>${d.action}</td>
+<td>${d.date}</td>
+<td><button onclick="deleteHistory('${doc.id}')">Löschen</button></td>
+`
+
+historyTable.querySelector("tbody").appendChild(tr)
+
+})
+
+})
+
+}
+
+/* DELETE FUNCTIONS */
+
+function deleteStaff(id){
+db.collection("staff").doc(id).delete()
+}
+
+function deleteInventory(id){
+db.collection("inventory").doc(id).delete()
+}
+
 function deleteLink(id){
-
 db.collection("links").doc(id).delete()
+}
 
+function deleteHistory(id){
+db.collection("history").doc(id).delete()
 }
 
 /* LOAD */
 
 function loadAll(){
-
 loadStaff()
 loadInventory()
 loadLinks()
-
+loadHistory()
 }
 
 </script>
