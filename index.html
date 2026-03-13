@@ -113,57 +113,25 @@ height:100vh;
 
 <main>
 
-<section id="konto" class="card">
-<h3>Kontostand</h3>
-
-<input id="kontoValue" placeholder="Neuer Kontostand">
-<button id="saveKonto">Speichern</button>
-
-<h2 id="kontoDisplay">0 €</h2>
-
+<section id="stats" class="card">
+<h3>Statistik</h3>
+<p>Inventar Einträge: <span id="statInventory">0</span></p>
+<p>Mitarbeiter: <span id="statStaff">0</span></p>
+<p>Links: <span id="statLinks">0</span></p>
 </section>
 
-<section id="station" class="card" style="display:none">
-<h3>Aktuelle Baustation</h3>
-
-<input id="stationName" placeholder="Station Name">
-<input id="stationBuilder" placeholder="Wer baut">
-
-<button id="saveStation">Speichern</button>
-
-<table id="stationTable">
+<section id="history" class="card" style="display:none">
+<h3>History</h3>
+<table id="historyTable">
 <thead>
 <tr>
-<th>Station</th>
-<th>Builder</th>
-<th>Status</th>
+<th>Aktion</th>
+<th>Datum</th>
 <th>Aktion</th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
-</section>
-
-<section id="payouts" class="card" style="display:none">
-
-<h3>Mitarbeiter Auszahlung</h3>
-
-<select id="payEmployee"></select>
-<input id="payAmount" type="number" placeholder="Betrag">
-
-<button id="addPayout">Auszahlen</button>
-
-<table id="payoutTable">
-<thead>
-<tr>
-<th>Mitarbeiter</th>
-<th>Betrag</th>
-<th>Datum</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-
 </section>
 
 <section id="inventory" class="card" style="display:none">
@@ -200,7 +168,6 @@ height:100vh;
 <thead><tr><th>Name</th><th>Aktion</th></tr></thead>
 <tbody></tbody>
 </table>
-
 </section>
 
 <section id="links" class="card" style="display:none">
@@ -215,7 +182,6 @@ height:100vh;
 <thead><tr><th>Name</th><th>Link</th><th>Aktion</th></tr></thead>
 <tbody></tbody>
 </table>
-
 </section>
 
 </main>
@@ -255,12 +221,10 @@ dashboard.style.display="block"
 
 setupNav()
 
-loadKonto()
-loadStation()
 loadStaff()
 loadInventory()
 loadLinks()
-loadPayouts()
+loadHistory()
 
 }else{
 errorMsg.innerText="Falscher Login"
@@ -273,54 +237,38 @@ function logout(){location.reload()}
 function setupNav(){
 
 navLinks.innerHTML=""
-navLinks.innerHTML+="<a onclick=\"showSection('konto')\">Konto</a>"
-navLinks.innerHTML+="<a onclick=\"showSection('station')\">Station</a>"
-navLinks.innerHTML+="<a onclick=\"showSection('payouts')\">Auszahlung</a>"
+navLinks.innerHTML+="<a onclick=\"showSection('stats')\">Statistik</a>"
 navLinks.innerHTML+="<a onclick=\"showSection('inventory')\">Inventar</a>"
 navLinks.innerHTML+="<a onclick=\"showSection('staff')\">Mitarbeiter</a>"
 navLinks.innerHTML+="<a onclick=\"showSection('links')\">Links</a>"
+navLinks.innerHTML+="<a onclick=\"showSection('history')\">History</a>"
 
 }
 
 function showSection(id){
 
-["konto","station","payouts","inventory","staff","links"].forEach(s=>{
+["stats","inventory","staff","links","history"].forEach(s=>{
 document.getElementById(s).style.display=(s===id)?"block":"none"
 })
 
 }
 
-/* KONTO */
+/* HISTORY */
 
-function loadKonto(){
+function addHistory(action){
 
-db.collection("konto").doc("main").onSnapshot(doc=>{
-
-if(doc.exists){
-kontoDisplay.innerText=doc.data().value+" €"
-}
-
+db.collection("history").add({
+action:action,
+date:new Date().toLocaleString()
 })
 
 }
 
-saveKonto.onclick=()=>{
+function loadHistory(){
 
-db.collection("konto").doc("main").set({
-value:Number(kontoValue.value)
-})
+db.collection("history").onSnapshot(s=>{
 
-kontoValue.value=""
-
-}
-
-/* PAYOUTS */
-
-function loadPayouts(){
-
-db.collection("payouts").onSnapshot(s=>{
-
-payoutTable.querySelector("tbody").innerHTML=""
+historyTable.querySelector("tbody").innerHTML=""
 
 s.forEach(doc=>{
 
@@ -329,12 +277,12 @@ const d=doc.data()
 const tr=document.createElement("tr")
 
 tr.innerHTML=`
-<td>${d.employee}</td>
-<td>${d.amount} €</td>
+<td>${d.action}</td>
 <td>${d.date}</td>
+<td><button onclick="deleteHistory('${doc.id}')">Löschen</button></td>
 `
 
-payoutTable.querySelector("tbody").appendChild(tr)
+historyTable.querySelector("tbody").appendChild(tr)
 
 })
 
@@ -342,14 +290,8 @@ payoutTable.querySelector("tbody").appendChild(tr)
 
 }
 
-addPayout.onclick=()=>{
-
-db.collection("payouts").add({
-employee:payEmployee.value,
-amount:Number(payAmount.value),
-date:new Date().toLocaleString()
-})
-
+function deleteHistory(id){
+db.collection("history").doc(id).delete()
 }
 
 /* STAFF */
@@ -360,11 +302,13 @@ db.collection("staff").onSnapshot(s=>{
 
 staffTable.querySelector("tbody").innerHTML=""
 invEmployee.innerHTML=""
-payEmployee.innerHTML=""
+
+let count=0
 
 s.forEach(doc=>{
 
 const d=doc.data()
+count++
 
 const tr=document.createElement("tr")
 
@@ -378,9 +322,10 @@ opt.text=d.name
 opt.value=d.name
 
 invEmployee.add(opt)
-payEmployee.add(opt.cloneNode(true))
 
 })
+
+statStaff.innerText=count
 
 })
 
@@ -392,6 +337,7 @@ const n=newEmployee.value.trim()
 if(!n)return
 
 db.collection("staff").add({name:n})
+addHistory("Mitarbeiter hinzugefügt: "+n)
 
 newEmployee.value=""
 
@@ -400,6 +346,7 @@ newEmployee.value=""
 function deleteStaff(id){
 
 db.collection("staff").doc(id).delete()
+addHistory("Mitarbeiter gelöscht")
 
 }
 
@@ -411,9 +358,12 @@ db.collection("inventory").onSnapshot(s=>{
 
 entriesTable.querySelector("tbody").innerHTML=""
 
+let count=0
+
 s.forEach(doc=>{
 
 const e=doc.data()
+count++
 
 const tr=document.createElement("tr")
 
@@ -429,6 +379,8 @@ entriesTable.querySelector("tbody").appendChild(tr)
 
 })
 
+statInventory.innerText=count
+
 })
 
 }
@@ -443,45 +395,18 @@ price:Number(price.value)
 }
 
 db.collection("inventory").add(e)
+addHistory("Inventar hinzugefügt: "+material.value)
+
+material.value=""
+quantity.value=""
+price.value=""
 
 }
 
-/* STATION */
+function deleteInventory(id){
 
-function loadStation(){
-
-db.collection("station").onSnapshot(s=>{
-
-stationTable.querySelector("tbody").innerHTML=""
-
-s.forEach(doc=>{
-
-const d=doc.data()
-
-const tr=document.createElement("tr")
-
-tr.innerHTML=`
-<td>${d.name}</td>
-<td>${d.builder}</td>
-<td>${d.status}</td>
-<td><button onclick="deleteStation('${doc.id}')">Fertig</button></td>
-`
-
-stationTable.querySelector("tbody").appendChild(tr)
-
-})
-
-})
-
-}
-
-saveStation.onclick=()=>{
-
-db.collection("station").add({
-name:stationName.value,
-builder:stationBuilder.value,
-status:"Wird gebaut"
-})
+db.collection("inventory").doc(id).delete()
+addHistory("Inventar entnommen")
 
 }
 
@@ -493,9 +418,12 @@ db.collection("links").onSnapshot(s=>{
 
 linksTable.querySelector("tbody").innerHTML=""
 
+let count=0
+
 s.forEach(doc=>{
 
 const l=doc.data()
+count++
 
 const tr=document.createElement("tr")
 
@@ -509,6 +437,8 @@ linksTable.querySelector("tbody").appendChild(tr)
 
 })
 
+statLinks.innerText=count
+
 })
 
 }
@@ -519,6 +449,18 @@ db.collection("links").add({
 name:linkName.value,
 url:linkURL.value
 })
+
+addHistory("Link hinzugefügt")
+
+linkName.value=""
+linkURL.value=""
+
+}
+
+function deleteLink(id){
+
+db.collection("links").doc(id).delete()
+addHistory("Link gelöscht")
 
 }
 
