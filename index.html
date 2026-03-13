@@ -9,14 +9,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
-:root{--bg:#0b0b0b;--panel:#101010;--accent:#c9a06b;--muted:#bfb7ad;--glass: rgba(255,255,255,0.03);}
-*{box-sizing:border-box}
+:root{
+--accent:#c9a06b;
+--muted:#d6d1c9;
+}
 
 body{
 margin:0;
 font-family:'Roboto Slab',serif;
 color:var(--muted);
-min-height:100vh;
 background-image:url("background.jpg");
 background-size:cover;
 background-position:center;
@@ -24,51 +25,43 @@ background-attachment:fixed;
 }
 
 header{
-padding:16px 20px;
+background:rgba(0,0,0,0.75);
+padding:15px;
 display:flex;
-align-items:center;
 justify-content:space-between;
-background:rgba(0,0,0,0.5);
+align-items:center;
 }
 
 nav a{
-color:var(--accent);
-text-decoration:none;
-font-weight:700;
-margin-right:10px;
+margin-right:12px;
 cursor:pointer;
+font-weight:bold;
+color:var(--accent);
 }
 
 main{
+padding:15px;
 display:grid;
-gap:12px;
-padding:12px;
+gap:15px;
 }
 
 .card{
-background:rgba(16,16,16,0.85);
+background:rgba(0,0,0,0.75);
+padding:15px;
 border-radius:8px;
-padding:12px;
 }
 
 input,select{
 width:100%;
 padding:6px;
-margin-top:4px;
-border-radius:6px;
-border:1px solid rgba(255,255,255,0.04);
-background:var(--glass);
-color:var(--muted);
+margin-top:5px;
 }
 
 button{
 margin-top:10px;
 padding:6px 10px;
-border-radius:6px;
 border:0;
 background:var(--accent);
-color:#000;
-font-weight:700;
 cursor:pointer;
 }
 
@@ -78,26 +71,27 @@ border-collapse:collapse;
 margin-top:10px;
 }
 
-th,td{
+td,th{
+border-bottom:1px solid #444;
 padding:6px;
-border-bottom:1px dashed rgba(255,255,255,0.1);
 }
 
 #loginCard{
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 height:100vh;
 }
+
 </style>
 </head>
 
 <body>
 
 <div id="loginCard">
-<div class="card" style="width:300px;text-align:center">
-<h2>Shelby Logistik</h2>
-<input id="username" placeholder="Benutzername">
+<div class="card">
+<h2>Shelby Login</h2>
+<input id="username" placeholder="Benutzer">
 <input id="password" type="password" placeholder="Passwort">
 <button id="loginBtn">Login</button>
 <div id="errorMsg"></div>
@@ -115,73 +109,159 @@ height:100vh;
 
 <section id="stats" class="card">
 <h3>Statistik</h3>
-<p>Inventar Einträge: <span id="statInventory">0</span></p>
 <p>Mitarbeiter: <span id="statStaff">0</span></p>
+<p>Inventar: <span id="statInventory">0</span></p>
 <p>Links: <span id="statLinks">0</span></p>
+<p>Auszahlungen: <span id="statPayouts">0</span></p>
 </section>
 
-<section id="history" class="card" style="display:none">
-<h3>History</h3>
-<table id="historyTable">
+<section id="staff" class="card" style="display:none">
+
+<h3>Mitarbeiter Verwaltung</h3>
+
+<input id="newEmployee" placeholder="Name">
+
+<select id="newRole">
+<option value="admin">Admin</option>
+<option value="manager">Manager</option>
+<option value="worker">Worker</option>
+<option value="viewer">Viewer</option>
+</select>
+
+<button id="addStaff">Mitarbeiter erstellen</button>
+
+<table id="staffTable">
 <thead>
 <tr>
-<th>Aktion</th>
-<th>Datum</th>
-<th>Aktion</th>
+<th>Name</th>
+<th>Rolle</th>
+<th></th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
+
 </section>
 
 <section id="inventory" class="card" style="display:none">
+
 <h3>Inventar</h3>
 
 <select id="invEmployee"></select>
+
 <input id="material" placeholder="Material">
 <input id="quantity" type="number" placeholder="Anzahl">
-<input id="price" type="number" placeholder="Preis">
 
 <button id="addInv">Eintragen</button>
 
-<table id="entriesTable">
+<table id="inventoryTable">
 <thead>
 <tr>
 <th>Mitarbeiter</th>
 <th>Material</th>
 <th>Anzahl</th>
-<th>Preis</th>
-<th>Aktion</th>
+<th></th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
-</section>
 
-<section id="staff" class="card" style="display:none">
-<h3>Mitarbeiter</h3>
-
-<input id="newEmployee" placeholder="Name">
-<button id="addStaff">Hinzufügen</button>
-
-<table id="staffTable">
-<thead><tr><th>Name</th><th>Aktion</th></tr></thead>
-<tbody></tbody>
-</table>
 </section>
 
 <section id="links" class="card" style="display:none">
+
 <h3>Links</h3>
 
 <input id="linkName" placeholder="Name">
 <input id="linkURL" placeholder="https://link.de">
 
-<button id="addLink">Hinzufügen</button>
+<button id="addLink">Link hinzufügen</button>
 
 <table id="linksTable">
-<thead><tr><th>Name</th><th>Link</th><th>Aktion</th></tr></thead>
+<thead>
+<tr>
+<th>Name</th>
+<th>Link</th>
+<th></th>
+</tr>
+</thead>
 <tbody></tbody>
 </table>
+
+</section>
+
+<section id="station" class="card" style="display:none">
+
+<h3>Station Bau</h3>
+
+<input id="stationName" placeholder="Station">
+<input id="stationBuilder" placeholder="Builder">
+
+<button id="addStation">Start</button>
+
+<table id="stationTable">
+<thead>
+<tr>
+<th>Station</th>
+<th>Builder</th>
+<th>Status</th>
+<th></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+</section>
+
+<section id="payouts" class="card" style="display:none">
+
+<h3>Mitarbeiter Auszahlung</h3>
+
+<select id="payEmployee"></select>
+<input id="payAmount" type="number" placeholder="Betrag">
+
+<button id="addPayout">Auszahlen</button>
+
+<table id="payoutTable">
+<thead>
+<tr>
+<th>Mitarbeiter</th>
+<th>Betrag</th>
+<th>Datum</th>
+<th></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+</section>
+
+<section id="konto" class="card" style="display:none">
+
+<h3>Kontostand</h3>
+
+<input id="kontoValue" placeholder="Neuer Betrag">
+<button id="saveKonto">Speichern</button>
+
+<h2 id="kontoDisplay">0 €</h2>
+
+</section>
+
+<section id="history" class="card" style="display:none">
+
+<h3>History</h3>
+
+<table id="historyTable">
+<thead>
+<tr>
+<th>Aktion</th>
+<th>Datum</th>
+<th></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
 </section>
 
 </main>
@@ -210,88 +290,73 @@ const accounts=[
 {user:'verwalter',pass:'verwalter123'}
 ];
 
+let currentRole="viewer";
+
 loginBtn.onclick=()=>{
 
-const acc=accounts.find(a=>a.user===username.value && a.pass===password.value)
+const u=username.value.trim()
+const p=password.value.trim()
 
-if(acc){
+const acc=accounts.find(a=>a.user===u && a.pass===p)
+
+if(!acc){
+errorMsg.innerText="Falscher Login"
+return
+}
 
 loginCard.style.display="none"
 dashboard.style.display="block"
 
+loadRole(u)
+loadAll()
+
+}
+
+function logout(){
+location.reload()
+}
+
+function loadRole(user){
+
+db.collection("roles").doc(user).get().then(doc=>{
+
+if(doc.exists){
+currentRole = doc.data().role
+}
+
 setupNav()
 
-loadStaff()
-loadInventory()
-loadLinks()
-loadHistory()
-
-}else{
-errorMsg.innerText="Falscher Login"
-}
+})
 
 }
-
-function logout(){location.reload()}
 
 function setupNav(){
 
 navLinks.innerHTML=""
+
 navLinks.innerHTML+="<a onclick=\"showSection('stats')\">Statistik</a>"
 navLinks.innerHTML+="<a onclick=\"showSection('inventory')\">Inventar</a>"
-navLinks.innerHTML+="<a onclick=\"showSection('staff')\">Mitarbeiter</a>"
 navLinks.innerHTML+="<a onclick=\"showSection('links')\">Links</a>"
+navLinks.innerHTML+="<a onclick=\"showSection('station')\">Station</a>"
 navLinks.innerHTML+="<a onclick=\"showSection('history')\">History</a>"
+
+if(currentRole==="admin"||currentRole==="manager"){
+navLinks.innerHTML+="<a onclick=\"showSection('staff')\">Mitarbeiter</a>"
+navLinks.innerHTML+="<a onclick=\"showSection('payouts')\">Auszahlungen</a>"
+navLinks.innerHTML+="<a onclick=\"showSection('konto')\">Konto</a>"
+}
 
 }
 
 function showSection(id){
 
-["stats","inventory","staff","links","history"].forEach(s=>{
-document.getElementById(s).style.display=(s===id)?"block":"none"
-})
+["stats","staff","inventory","links","station","payouts","konto","history"].forEach(s=>{
 
-}
-
-/* HISTORY */
-
-function addHistory(action){
-
-db.collection("history").add({
-action:action,
-date:new Date().toLocaleString()
-})
-
-}
-
-function loadHistory(){
-
-db.collection("history").onSnapshot(s=>{
-
-historyTable.querySelector("tbody").innerHTML=""
-
-s.forEach(doc=>{
-
-const d=doc.data()
-
-const tr=document.createElement("tr")
-
-tr.innerHTML=`
-<td>${d.action}</td>
-<td>${d.date}</td>
-<td><button onclick="deleteHistory('${doc.id}')">Löschen</button></td>
-`
-
-historyTable.querySelector("tbody").appendChild(tr)
+const el=document.getElementById(s)
+if(el) el.style.display=(s===id)?"block":"none"
 
 })
 
-})
-
-}
-
-function deleteHistory(id){
-db.collection("history").doc(id).delete()
 }
 
 /* STAFF */
@@ -302,6 +367,7 @@ db.collection("staff").onSnapshot(s=>{
 
 staffTable.querySelector("tbody").innerHTML=""
 invEmployee.innerHTML=""
+payEmployee.innerHTML=""
 
 let count=0
 
@@ -312,8 +378,11 @@ count++
 
 const tr=document.createElement("tr")
 
-tr.innerHTML=`<td>${d.name}</td>
-<td><button onclick="deleteStaff('${doc.id}')">Löschen</button></td>`
+tr.innerHTML=`
+<td>${d.name}</td>
+<td>${d.role}</td>
+<td><button onclick="deleteStaff('${doc.id}')">Löschen</button></td>
+`
 
 staffTable.querySelector("tbody").appendChild(tr)
 
@@ -322,6 +391,7 @@ opt.text=d.name
 opt.value=d.name
 
 invEmployee.add(opt)
+payEmployee.add(opt.cloneNode(true))
 
 })
 
@@ -333,11 +403,17 @@ statStaff.innerText=count
 
 addStaff.onclick=()=>{
 
-const n=newEmployee.value.trim()
-if(!n)return
+const name=newEmployee.value
+const role=newRole.value
 
-db.collection("staff").add({name:n})
-addHistory("Mitarbeiter hinzugefügt: "+n)
+db.collection("staff").add({
+name:name,
+role:role
+})
+
+db.collection("roles").doc(name).set({
+role:role
+})
 
 newEmployee.value=""
 
@@ -346,7 +422,6 @@ newEmployee.value=""
 function deleteStaff(id){
 
 db.collection("staff").doc(id).delete()
-addHistory("Mitarbeiter gelöscht")
 
 }
 
@@ -356,7 +431,7 @@ function loadInventory(){
 
 db.collection("inventory").onSnapshot(s=>{
 
-entriesTable.querySelector("tbody").innerHTML=""
+inventoryTable.querySelector("tbody").innerHTML=""
 
 let count=0
 
@@ -371,11 +446,10 @@ tr.innerHTML=`
 <td>${e.employee}</td>
 <td>${e.material}</td>
 <td>${e.quantity}</td>
-<td>${e.price}</td>
 <td><button onclick="deleteInventory('${doc.id}')">Entnommen</button></td>
 `
 
-entriesTable.querySelector("tbody").appendChild(tr)
+inventoryTable.querySelector("tbody").appendChild(tr)
 
 })
 
@@ -387,26 +461,20 @@ statInventory.innerText=count
 
 addInv.onclick=()=>{
 
-const e={
+db.collection("inventory").add({
 employee:invEmployee.value,
 material:material.value,
-quantity:Number(quantity.value),
-price:Number(price.value)
-}
-
-db.collection("inventory").add(e)
-addHistory("Inventar hinzugefügt: "+material.value)
+quantity:Number(quantity.value)
+})
 
 material.value=""
 quantity.value=""
-price.value=""
 
 }
 
 function deleteInventory(id){
 
 db.collection("inventory").doc(id).delete()
-addHistory("Inventar entnommen")
 
 }
 
@@ -450,17 +518,21 @@ name:linkName.value,
 url:linkURL.value
 })
 
-addHistory("Link hinzugefügt")
-
-linkName.value=""
-linkURL.value=""
-
 }
 
 function deleteLink(id){
 
 db.collection("links").doc(id).delete()
-addHistory("Link gelöscht")
+
+}
+
+/* LOAD */
+
+function loadAll(){
+
+loadStaff()
+loadInventory()
+loadLinks()
 
 }
 
