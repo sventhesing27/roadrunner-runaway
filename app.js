@@ -1,6 +1,6 @@
 
 const accounts=[
-{user:'Admin',pass:'Run'},
+{user:'admin',pass:'Run'},
 {user:'Pilot',pass:'0815'},
 {user:'Verwalter',pass:'FDH'}
 ];
