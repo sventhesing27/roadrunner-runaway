@@ -105,8 +105,8 @@ height:100vh;
 <nav>
 <a onclick="show('stats')">Statistik</a>
 <a onclick="show('staff')">Mitarbeiter</a>
-<a onclick="show('inventory')">Inventar</a>
-<a onclick="show('orders')">Aufträge</a>
+<a onclick="show('inventory')">Was noch Fehlt</a>
+<a onclick="show('orders')">Welche Station</a>
 <a onclick="show('links')">Links</a>
 <a onclick="show('history')">History</a>
 </nav>
@@ -118,8 +118,8 @@ height:100vh;
 <section id="stats" class="card">
 <h3>Statistik</h3>
 <p>Mitarbeiter: <span id="statStaff">0</span></p>
-<p>Inventar: <span id="statInventory">0</span></p>
-<p>Aufträge: <span id="statOrders">0</span></p>
+<p>Was noch Fehlt: <span id="statInventory">0</span></p>
+<p>Welche station: <span id="statOrders">0</span></p>
 <p>Links: <span id="statLinks">0</span></p>
 </section>
 
@@ -134,7 +134,7 @@ height:100vh;
 </section>
 
 <section id="inventory" class="card" style="display:none">
-<h3>Inventar</h3>
+<h3>Was noch Fehlt</h3>
 <select id="invEmployee"></select>
 <input id="material" placeholder="Material">
 <input id="quantity" type="number" placeholder="Anzahl">
@@ -148,7 +148,7 @@ height:100vh;
 </section>
 
 <section id="orders" class="card" style="display:none">
-<h3>Aufträge</h3>
+<h3>Welche Station</h3>
 <input id="orderClient" placeholder="Kunde">
 <input id="orderItem" placeholder="Bestellung">
 <button onclick="addOrder()">Eintragen</button>
