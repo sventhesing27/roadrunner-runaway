@@ -109,6 +109,7 @@ height:100vh;
 <a onclick="show('orders')">Welche Station</a>
 <a onclick="show('links')">Links</a>
 <a onclick="show('history')">History</a>
+<a onclick="show('materials')">Material Orte</a>
 </nav>
 <button onclick="logout()">Logout</button>
 </header>
@@ -190,6 +191,35 @@ height:100vh;
 </table>
 </section>
 
+<section id="materials" class="card" style="display:none">
+
+<h3>Material Sammelorte</h3>
+
+<input id="matSystem" placeholder="System">
+
+<input id="matLocation" placeholder="Ort / Planet / Ring">
+
+<input id="matMaterial" placeholder="Material">
+
+<button onclick="addMaterial()">Hinzufügen</button>
+
+<table id="materialsTable">
+
+<thead>
+<tr>
+<th>System</th>
+<th>Ort</th>
+<th>Material</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+</section>
+
 </main>
 </div>
 
@@ -242,7 +272,7 @@ loadAll();
 function logout(){location.reload()}
 
 function show(id){
-["stats","staff","inventory","orders","links","history"].forEach(s=>{
+["stats","staff","inventory","orders","links","history","materials"].forEach(s=>{
 document.getElementById(s).style.display=(s===id)?"block":"none"
 })
 }
@@ -475,12 +505,73 @@ if(currentRole!=="admin"){alert("Nur Admin");return;}
 db.collection("inventory").doc(id).delete();
 }
 
+/* MATERIAL ORTE */
+
+function addMaterial(){
+
+db.collection("materials").add({
+
+system: matSystem.value,
+location: matLocation.value,
+material: matMaterial.value
+
+});
+
+}
+
+function deleteMaterial(id){
+
+if(currentRole!=="admin"){
+alert("Nur Admin darf löschen");
+return;
+}
+
+db.collection("materials").doc(id).delete();
+
+}
+
+function loadMaterials(){
+
+db.collection("materials").onSnapshot(snapshot=>{
+
+const tbody=document.querySelector("#materialsTable tbody");
+
+tbody.innerHTML="";
+
+snapshot.forEach(doc=>{
+
+const d=doc.data();
+
+let btn="";
+
+if(currentRole==="admin"){
+btn=`<button onclick="deleteMaterial('${doc.id}')">Löschen</button>`;
+}
+
+const tr=document.createElement("tr");
+
+tr.innerHTML=`
+<td>${d.system}</td>
+<td>${d.location}</td>
+<td>${d.material}</td>
+<td>${btn}</td>
+`;
+
+tbody.appendChild(tr);
+
+});
+
+});
+
+}
+
 function loadAll(){
 loadStaff();
 loadInventory();
 loadOrders();
 loadLinks();
 loadHistory();
+loadMaterials();
 }
 
 </script>
