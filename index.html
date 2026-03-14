@@ -142,9 +142,9 @@ height:100vh;
 
 <h3>Material Lieferung</h3>
 
-<select id="deliverMaterial"></select>
+<select id="deliverSelect"></select>
 <input id="deliverAmount" type="number" placeholder="Geliefert">
-<button onclick="deliverMaterial()">Liefern</button>
+<button onclick="deliverDelivery()">Liefern</button>
 
 <table id="inventoryTable">
 <thead>
@@ -290,9 +290,9 @@ delivered: 0
 
 }
 
-function deliverMaterial(){
+function deliverDelivery(){
 
-const id = deliverMaterial.value;
+const id = deliverSelect.value;
 const amount = Number(deliverAmount.value);
 
 db.collection("inventory").doc(id).get().then(doc=>{
@@ -314,7 +314,7 @@ db.collection("inventory").onSnapshot(snapshot=>{
 const tbody = document.querySelector("#inventoryTable tbody");
 tbody.innerHTML="";
 
-deliverMaterial.innerHTML="";
+deliverSelect.innerHTML="";
 
 snapshot.forEach(doc=>{
 
@@ -336,7 +336,7 @@ const opt = document.createElement("option");
 opt.value = doc.id;
 opt.text = data.material;
 
-deliverMaterial.add(opt);
+deliverSelect.add(opt);
 
 });
 
