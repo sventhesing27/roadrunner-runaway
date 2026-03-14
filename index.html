@@ -128,23 +128,36 @@ height:100vh;
 <input id="staffName" placeholder="Name">
 <button onclick="addStaff()">Hinzufügen</button>
 <table id="staffTable">
-<thead><tr><th>Name</th><th></th></tr></thead>
+<thead><tr><th>Name</th></tr></thead>
 <tbody></tbody>
 </table>
 </section>
 
 <section id="inventory" class="card" style="display:none">
-<h3>Was noch Fehlt</h3>
-<select id="invEmployee"></select>
-<input id="material" placeholder="Material">
-<input id="quantity" type="number" placeholder="Anzahl">
-<input id="price" type="number" placeholder="Preis">
-<button onclick="addInventory()">Eintragen</button>
+<h3>Material Planung (Admin)</h3>
+
+<input id="adminMaterial" placeholder="Material">
+<input id="adminNeeded" type="number" placeholder="Benötigt">
+<button onclick="addNeededMaterial()">Planen</button>
+
+<h3>Material Lieferung</h3>
+
+<select id="deliverMaterial"></select>
+<input id="deliverAmount" type="number" placeholder="Geliefert">
+<button onclick="deliverMaterial()">Liefern</button>
 
 <table id="inventoryTable">
-<thead><tr><th>Mitarbeiter</th><th>Material</th><th>Anzahl</th><th>Preis</th><th></th></tr></thead>
+<thead>
+<tr>
+<th>Material</th>
+<th>Benötigt</th>
+<th>Geliefert</th>
+<th>Fehlt</th>
+</tr>
+</thead>
 <tbody></tbody>
 </table>
+
 </section>
 
 <section id="orders" class="card" style="display:none">
@@ -153,7 +166,7 @@ height:100vh;
 <input id="orderItem" placeholder="Name der Station">
 <button onclick="addOrder()">Eintragen</button>
 <table id="ordersTable">
-<thead><tr><th>System</th><th>Name der Station</th><th></th></tr></thead>
+<thead><tr><th>System</th><th>Name der Station</th></tr></thead>
 <tbody></tbody>
 </table>
 </section>
@@ -164,7 +177,7 @@ height:100vh;
 <input id="linkURL" placeholder="URL">
 <button onclick="addLink()">Link hinzufügen</button>
 <table id="linksTable">
-<thead><tr><th>Name</th><th>URL</th><th></th></tr></thead>
+<thead><tr><th>Name</th><th>URL</th></tr></thead>
 <tbody></tbody>
 </table>
 </section>
@@ -185,15 +198,13 @@ height:100vh;
 
 <script>
 
-/* FIREBASE KONFIG EINTRAGEN */
 const firebaseConfig={
 apiKey: "AIzaSyAIGP9jBcFtGoPXMsz2Jm8sxNhYm6d1-sA",
-  authDomain: "roadrunner-runaway-86d6e.firebaseapp.com",
-  databaseURL: "https://roadrunner-runaway-86d6e-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "roadrunner-runaway-86d6e",
-  storageBucket: "roadrunner-runaway-86d6e.firebasestorage.app",
-  messagingSenderId: "535598462149",
-  appId: "1:535598462149:web:8d72337fdc394b2a52acac"
+authDomain: "roadrunner-runaway-86d6e.firebaseapp.com",
+projectId: "roadrunner-runaway-86d6e",
+storageBucket: "roadrunner-runaway-86d6e.firebasestorage.app",
+messagingSenderId: "535598462149",
+appId: "1:535598462149:web:8d72337fdc394b2a52acac"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -225,8 +236,6 @@ currentRole = acc.role;
 loginCard.style.display="none";
 dashboard.style.display="block";
 
-setupPermissions();
-
 loadAll();
 }
 
@@ -244,7 +253,6 @@ function loadStaff(){
 db.collection("staff").onSnapshot(s=>{
 
 staffTable.querySelector("tbody").innerHTML="";
-invEmployee.innerHTML="";
 statStaff.innerText=s.size;
 
 s.forEach(doc=>{
@@ -252,13 +260,8 @@ s.forEach(doc=>{
 const d=doc.data();
 
 const tr=document.createElement("tr");
-tr.innerHTML=`<td>${d.name}</td><td><button onclick="deleteStaff('${doc.id}')">Löschen</button></td>`;
+tr.innerHTML=`<td>${d.name}</td>`;
 staffTable.querySelector("tbody").appendChild(tr);
-
-const opt=document.createElement("option");
-opt.value=d.name;
-opt.text=d.name;
-invEmployee.add(opt);
 
 });
 
@@ -268,65 +271,76 @@ invEmployee.add(opt);
 function addStaff(){
 if(!staffName.value) return;
 db.collection("staff").add({name:staffName.value});
-addHistory("Mitarbeiter erstellt");
 }
 
-function deleteStaff(id){
+/* INVENTORY SYSTEM */
+
+function addNeededMaterial(){
 
 if(currentRole !== "admin"){
-alert("Nur Admin darf löschen");
+alert("Nur Admin darf Material planen");
 return;
 }
 
-db.collection("staff").doc(id).delete();
+db.collection("inventory").add({
+material: adminMaterial.value,
+needed: Number(adminNeeded.value),
+delivered: 0
+});
 
 }
 
-/* INVENTORY */
+function deliverMaterial(){
+
+const id = deliverMaterial.value;
+const amount = Number(deliverAmount.value);
+
+db.collection("inventory").doc(id).get().then(doc=>{
+
+const data = doc.data();
+
+db.collection("inventory").doc(id).update({
+delivered: data.delivered + amount
+});
+
+});
+
+}
 
 function loadInventory(){
-db.collection("inventory").onSnapshot(s=>{
 
-inventoryTable.querySelector("tbody").innerHTML="";
-statInventory.innerText=s.size;
+db.collection("inventory").onSnapshot(snapshot=>{
 
-s.forEach(doc=>{
+const tbody = document.querySelector("#inventoryTable tbody");
+tbody.innerHTML="";
 
-const d=doc.data();
+deliverMaterial.innerHTML="";
 
-const tr=document.createElement("tr");
-tr.innerHTML=`
-<td>${d.employee}</td>
-<td>${d.material}</td>
-<td>${d.quantity}</td>
-<td>${d.price}</td>
-<td><button onclick="deleteInventory('${doc.id}')">Entnommen</button></td>`;
+snapshot.forEach(doc=>{
 
-inventoryTable.querySelector("tbody").appendChild(tr);
+const data = doc.data();
+const missing = data.needed - data.delivered;
+
+const tr = document.createElement("tr");
+
+tr.innerHTML = `
+<td>${data.material}</td>
+<td>${data.needed}</td>
+<td>${data.delivered}</td>
+<td>${missing}</td>
+`;
+
+tbody.appendChild(tr);
+
+const opt = document.createElement("option");
+opt.value = doc.id;
+opt.text = data.material;
+
+deliverMaterial.add(opt);
 
 });
 
 });
-}
-
-function addInventory(){
-db.collection("inventory").add({
-employee:invEmployee.value,
-material:material.value,
-quantity:Number(quantity.value),
-price:Number(price.value)
-});
-addHistory("Inventar hinzugefügt");
-}
-
-function deleteInventory(id){
-
-if(currentRole !== "admin"){
-alert("Nur Admin darf löschen");
-return;
-}
-
-db.collection("inventory").doc(id).delete();
 
 }
 
@@ -345,8 +359,7 @@ const d=doc.data();
 const tr=document.createElement("tr");
 tr.innerHTML=`
 <td>${d.client}</td>
-<td>${d.item}</td>
-<td><button onclick="deleteOrder('${doc.id}')">Erledigt</button></td>`;
+<td>${d.item}</td>`;
 
 ordersTable.querySelector("tbody").appendChild(tr);
 
@@ -360,18 +373,6 @@ db.collection("orders").add({
 client:orderClient.value,
 item:orderItem.value
 });
-addHistory("Auftrag erstellt");
-}
-
-function deleteOrder(id){
-
-if(currentRole !== "admin"){
-alert("Nur Admin darf löschen");
-return;
-}
-
-db.collection("orders").doc(id).delete();
-
 }
 
 /* LINKS */
@@ -389,8 +390,7 @@ const d=doc.data();
 const tr=document.createElement("tr");
 tr.innerHTML=`
 <td>${d.name}</td>
-<td><a href="${d.url}" target="_blank">${d.url}</a></td>
-<td><button onclick="deleteLink('${doc.id}')">Löschen</button></td>`;
+<td><a href="${d.url}" target="_blank">${d.url}</a></td>`;
 
 linksTable.querySelector("tbody").appendChild(tr);
 
@@ -404,28 +404,9 @@ db.collection("links").add({
 name:linkName.value,
 url:linkURL.value
 });
-addHistory("Link erstellt");
-}
-
-function deleteLink(id){
-
-if(currentRole !== "admin"){
-alert("Nur Admin darf löschen");
-return;
-}
-
-db.collection("links").doc(id).delete();
-
 }
 
 /* HISTORY */
-
-function addHistory(action){
-db.collection("history").add({
-date:new Date().toLocaleString(),
-action:action
-});
-}
 
 function loadHistory(){
 db.collection("history").onSnapshot(s=>{
@@ -442,23 +423,6 @@ historyTable.querySelector("tbody").appendChild(tr);
 });
 
 });
-}
-
-function setupPermissions(){
-
-if(currentRole === "pilot"){
-
-document.querySelector("a[onclick=\"show('staff')\"]").style.display="none";
-document.querySelector("a[onclick=\"show('history')\"]").style.display="none";
-
-}
-
-if(currentRole === "verwalter"){
-
-document.querySelector("a[onclick=\"show('staff')\"]").style.display="none";
-
-}
-
 }
 
 function loadAll(){
