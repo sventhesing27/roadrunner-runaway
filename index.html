@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -134,6 +135,7 @@ height:100vh;
 </section>
 
 <section id="inventory" class="card" style="display:none">
+
 <h3>Material Planung (Admin)</h3>
 
 <input id="adminMaterial" placeholder="Material">
@@ -153,6 +155,7 @@ height:100vh;
 <th>Benötigt</th>
 <th>Geliefert</th>
 <th>Fehlt</th>
+<th>Fertig</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -273,7 +276,7 @@ if(!staffName.value) return;
 db.collection("staff").add({name:staffName.value});
 }
 
-/* INVENTORY SYSTEM */
+/* INVENTORY */
 
 function addNeededMaterial(){
 
@@ -300,6 +303,8 @@ db.collection("inventory").doc(id).get().then(doc=>{
 const data = doc.data();
 const newDelivered = data.delivered + amount;
 
+/* AUTOMATISCHES LÖSCHEN */
+
 if(newDelivered >= data.needed){
 
 db.collection("inventory").doc(id).delete();
@@ -313,6 +318,17 @@ delivered:newDelivered
 }
 
 });
+
+}
+
+function finishInventory(id){
+
+if(currentRole !== "admin"){
+alert("Nur Admin darf löschen");
+return;
+}
+
+db.collection("inventory").doc(id).delete();
 
 }
 
@@ -330,6 +346,12 @@ snapshot.forEach(doc=>{
 const data = doc.data();
 const missing = data.needed - data.delivered;
 
+let button="";
+
+if(currentRole==="admin"){
+button=`<button onclick="finishInventory('${doc.id}')">Fertig</button>`;
+}
+
 const tr = document.createElement("tr");
 
 tr.innerHTML = `
@@ -337,6 +359,7 @@ tr.innerHTML = `
 <td>${data.needed}</td>
 <td>${data.delivered}</td>
 <td>${missing}</td>
+<td>${button}</td>
 `;
 
 tbody.appendChild(tr);
