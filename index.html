@@ -298,10 +298,19 @@ const amount = Number(deliverAmount.value);
 db.collection("inventory").doc(id).get().then(doc=>{
 
 const data = doc.data();
+const newDelivered = data.delivered + amount;
+
+if(newDelivered >= data.needed){
+
+db.collection("inventory").doc(id).delete();
+
+}else{
 
 db.collection("inventory").doc(id).update({
-delivered: data.delivered + amount
+delivered:newDelivered
 });
+
+}
 
 });
 
