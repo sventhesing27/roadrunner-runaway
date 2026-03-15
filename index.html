@@ -122,6 +122,27 @@ height:100vh;
 <p>Was noch Fehlt: <span id="statInventory">0</span></p>
 <p>Welche station: <span id="statOrders">0</span></p>
 <p>Links: <span id="statLinks">0</span></p>
+
+<h3>Events</h3>
+
+<input id="eventTitle" placeholder="Event Name">
+<input id="eventDate" type="date">
+<input id="eventSystem" placeholder="System">
+
+<button onclick="addEvent()">Event erstellen</button>
+
+<table id="eventsTable">
+<thead>
+<tr>
+<th>Event</th>
+<th>Datum</th>
+<th>System</th>
+<th></th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
 </section>
 
 <section id="staff" class="card" style="display:none">
@@ -565,6 +586,71 @@ tbody.appendChild(tr);
 
 }
 
+
+
+/* EVENTS */
+
+function addEvent(){
+
+if(currentRole !== "admin"){
+alert("Nur Admin darf Events erstellen");
+return;
+}
+
+db.collection("events").add({
+title: eventTitle.value,
+date: eventDate.value,
+system: eventSystem.value
+});
+
+}
+
+function deleteEvent(id){
+
+if(currentRole !== "admin"){
+alert("Nur Admin");
+return;
+}
+
+db.collection("events").doc(id).delete();
+
+}
+
+function loadEvents(){
+
+db.collection("events").onSnapshot(snapshot=>{
+
+const tbody=document.querySelector("#eventsTable tbody");
+
+tbody.innerHTML="";
+
+snapshot.forEach(doc=>{
+
+const d=doc.data();
+
+let btn="";
+
+if(currentRole==="admin"){
+btn=`<button onclick="deleteEvent('${doc.id}')">Löschen</button>`;
+}
+
+const tr=document.createElement("tr");
+
+tr.innerHTML=`
+<td>${d.title}</td>
+<td>${d.date}</td>
+<td>${d.system}</td>
+<td>${btn}</td>
+`;
+
+tbody.appendChild(tr);
+
+});
+
+});
+
+}
+
 function loadAll(){
 loadStaff();
 loadInventory();
@@ -572,6 +658,7 @@ loadOrders();
 loadLinks();
 loadHistory();
 loadMaterials();
+loadEvents();
 }
 
 </script>
