@@ -15,7 +15,6 @@ table{width:100%;border-collapse:collapse;margin-top:20px}
 th,td{padding:10px;border-bottom:1px solid #333}
 </style>
 </head>
-
 <body>
 
 <header>Elite Dangerous Ingenieur Guide</header>
@@ -25,13 +24,44 @@ th,td{padding:10px;border-bottom:1px solid #333}
 
 <h3>Schiff auswählen</h3>
 <select id="ship">
+<option>Sidewinder</option>
+<option>Adder</option>
+<option>Hauler</option>
+<option>Eagle</option>
+<option>Imperial Eagle</option>
+<option>Cobra Mk III</option>
+<option>Cobra Mk IV</option>
+<option>Viper Mk III</option>
+<option>Viper Mk IV</option>
+<option>Vulture</option>
+<option>Diamondback Scout</option>
+<option>Diamondback Explorer</option>
+<option>Asp Scout</option>
+<option>Asp Explorer</option>
+<option>Keelback</option>
+<option>Type-6 Transporter</option>
+<option>Type-7 Transporter</option>
+<option>Type-9 Heavy</option>
+<option>Type-10 Defender</option>
 <option>Python</option>
 <option>Krait Mk II</option>
-<option>Anaconda</option>
+<option>Krait Phantom</option>
 <option>Fer-de-Lance</option>
+<option>Mamba</option>
+<option>Alliance Chieftain</option>
+<option>Alliance Challenger</option>
+<option>Alliance Crusader</option>
+<option>Federal Dropship</option>
+<option>Federal Assault Ship</option>
+<option>Federal Gunship</option>
 <option>Federal Corvette</option>
+<option>Imperial Courier</option>
+<option>Imperial Clipper</option>
 <option>Imperial Cutter</option>
-<option>Asp Explorer</option>
+<option>Anaconda</option>
+<option>Beluga Liner</option>
+<option>Orca</option>
+<option>Dolphin</option>
 </select>
 
 <h3>Modul auswählen</h3>
@@ -41,12 +71,26 @@ th,td{padding:10px;border-bottom:1px solid #333}
 <option>Energieverteiler</option>
 <option>Schildgenerator</option>
 <option>Kraftwerk</option>
+<option>Sensoren</option>
+<option>Lebenserhaltung</option>
 <option>Multikanonen</option>
+<option>Burst-Laser</option>
 <option>Beam-Laser</option>
+<option>Pulse-Laser</option>
 <option>Railgun</option>
 <option>Plasma-Beschleuniger</option>
+<option>Raketenwerfer</option>
+<option>Torpedowerfer</option>
+<option>Punktverteidigung</option>
+<option>Gegenmaßnahmen</option>
 <option>Schildverstärker</option>
 <option>Rumpfverstärkung</option>
+<option>Modulverstärkung</option>
+<option>Guardian-FSD-Booster</option>
+<option>Heat Sink Launcher</option>
+<option>Chaff-Werfer</option>
+<option>ECM</option>
+<option>Point Defence</option>
 </select>
 
 <button onclick="zeige()">Empfehlung anzeigen</button>
@@ -69,7 +113,6 @@ th,td{padding:10px;border-bottom:1px solid #333}
 </main>
 
 <script>
-
 const daten={
 "Frameshift-Antrieb":{mod:"Erhöhte Sprungreichweite",effekt:"Mass Manager",ingenieur:"Felicity Farseer",system:"Deciat"},
 "Triebwerke":{mod:"Dirty Drives",effekt:"Drag Drives",ingenieur:"Professor Palin",system:"Maia"},
@@ -90,6 +133,11 @@ const module=document.getElementById("module").value;
 const tbody=document.getElementById("result");
 const d=daten[module];
 
+if(!d){
+tbody.innerHTML="<tr><td colspan='6'>Für dieses Modul keine Empfehlung hinterlegt</td></tr>";
+return;
+}
+
 tbody.innerHTML=`
 <tr>
 <td>${ship}</td>
@@ -100,7 +148,6 @@ tbody.innerHTML=`
 <td>${d.system}</td>
 </tr>`;
 }
-
 </script>
 
 </body>
