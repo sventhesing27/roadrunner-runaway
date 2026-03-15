@@ -110,6 +110,7 @@ height:100vh;
 <a onclick="show('links')">Links</a>
 <a onclick="show('history')">History</a>
 <a onclick="show('materials')">Material Orte</a>
+<a onclick="show('engineer')">Ingenieure</a>
 </nav>
 <button onclick="logout()">Logout</button>
 </header>
@@ -241,6 +242,15 @@ height:100vh;
 
 </section>
 
+
+<section id="engineer" class="card" style="display:none">
+
+<h3>Elite Dangerous Ingenieur Guide</h3>
+
+<iframe src="engineer.html" style="width:100%;height:900px;border:none;"></iframe>
+
+</section>
+
 </main>
 </div>
 
@@ -293,7 +303,7 @@ loadAll();
 function logout(){location.reload()}
 
 function show(id){
-["stats","staff","inventory","orders","links","history","materials"].forEach(s=>{
+["stats","staff","inventory","orders","links","history","materials","engineer"].forEach(s=>{
 document.getElementById(s).style.display=(s===id)?"block":"none"
 })
 }

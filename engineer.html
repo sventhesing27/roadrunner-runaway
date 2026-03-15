@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Elite Dangerous Ingenieur Guide</title>
+<style>
+body{margin:0;font-family:Arial;background:#0b0b0b;color:#e0e0e0}
+header{background:#111;padding:20px;text-align:center;font-size:28px}
+main{max-width:1200px;margin:auto;padding:20px}
+.card{background:#151515;padding:20px;border-radius:10px}
+select,input{width:100%;padding:8px;margin-top:6px}
+button{padding:10px;margin-top:10px;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{padding:10px;border-bottom:1px solid #333}
+</style>
+</head>
+
+<body>
+
+<header>Elite Dangerous Ingenieur Guide</header>
+
+<main>
+<div class="card">
+
+<h3>Schiff auswählen</h3>
+<select id="ship">
+<option>Python</option>
+<option>Krait Mk II</option>
+<option>Anaconda</option>
+<option>Fer-de-Lance</option>
+<option>Federal Corvette</option>
+<option>Imperial Cutter</option>
+<option>Asp Explorer</option>
+</select>
+
+<h3>Modul auswählen</h3>
+<select id="module">
+<option>Frameshift-Antrieb</option>
+<option>Triebwerke</option>
+<option>Energieverteiler</option>
+<option>Schildgenerator</option>
+<option>Kraftwerk</option>
+<option>Multikanonen</option>
+<option>Beam-Laser</option>
+<option>Railgun</option>
+<option>Plasma-Beschleuniger</option>
+<option>Schildverstärker</option>
+<option>Rumpfverstärkung</option>
+</select>
+
+<button onclick="zeige()">Empfehlung anzeigen</button>
+
+<table>
+<thead>
+<tr>
+<th>Schiff</th>
+<th>Modul</th>
+<th>Grad‑5 Modifikation</th>
+<th>Experimenteller Effekt</th>
+<th>Ingenieur</th>
+<th>System</th>
+</tr>
+</thead>
+<tbody id="result"></tbody>
+</table>
+
+</div>
+</main>
+
+<script>
+
+const daten={
+"Frameshift-Antrieb":{mod:"Erhöhte Sprungreichweite",effekt:"Mass Manager",ingenieur:"Felicity Farseer",system:"Deciat"},
+"Triebwerke":{mod:"Dirty Drives",effekt:"Drag Drives",ingenieur:"Professor Palin",system:"Maia"},
+"Energieverteiler":{mod:"Charge Enhanced",effekt:"Super Conduits",ingenieur:"The Dweller",system:"Wyrd"},
+"Schildgenerator":{mod:"Verstärkt",effekt:"Hi-Cap",ingenieur:"Lei Cheung",system:"Laksak"},
+"Kraftwerk":{mod:"Overcharged",effekt:"Thermal Spread",ingenieur:"Hera Tani",system:"Kuwemaki"},
+"Multikanonen":{mod:"Overcharged",effekt:"Corrosive Shell",ingenieur:"Tod McQuinn",system:"Wolf 397"},
+"Beam-Laser":{mod:"Efficient",effekt:"Thermal Vent",ingenieur:"The Dweller",system:"Wyrd"},
+"Railgun":{mod:"Long Range",effekt:"Plasma Slug",ingenieur:"Zacariah Nemo",system:"Yoru"},
+"Plasma-Beschleuniger":{mod:"Efficient",effekt:"Target Lock Breaker",ingenieur:"Ram Tah",system:"Meene"},
+"Schildverstärker":{mod:"Heavy Duty",effekt:"Super Capacitors",ingenieur:"Didi Vatermann",system:"Leesti"},
+"Rumpfverstärkung":{mod:"Heavy Duty",effekt:"Deep Plating",ingenieur:"Selene Jean",system:"Kuk"}
+};
+
+function zeige(){
+const ship=document.getElementById("ship").value;
+const module=document.getElementById("module").value;
+const tbody=document.getElementById("result");
+const d=daten[module];
+
+tbody.innerHTML=`
+<tr>
+<td>${ship}</td>
+<td>${module}</td>
+<td>${d.mod}</td>
+<td>${d.effekt}</td>
+<td>${d.ingenieur}</td>
+<td>${d.system}</td>
+</tr>`;
+}
+
+</script>
+
+</body>
+</html>
