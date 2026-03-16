@@ -299,12 +299,29 @@ error.innerText = error.message;
 
 }
 
-currentRole = acc.role;
+const auth = firebase.auth();
+
+loginBtn.onclick = function(){
+
+const email = username.value.trim();
+const passwordInput = password.value.trim();
+
+auth.signInWithEmailAndPassword(email, passwordInput)
+.then((userCredential) => {
 
 loginCard.style.display="none";
 dashboard.style.display="block";
 
 loadAll();
+
+})
+.catch((error) => {
+
+console.log(error);
+error.innerText = error.message;
+
+});
+
 }
 
 function logout(){location.reload()}
