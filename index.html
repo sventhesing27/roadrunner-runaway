@@ -92,7 +92,7 @@ height:100vh;
 <div id="loginCard">
 <div class="card" style="width:320px;text-align:center;">
 <h2>Herzlich Willkommen</h2>
-<input id="username" placeholder="Benutzer">
+<input id="username" placeholder="Email">
 <input id="password" type="password" placeholder="Passwort">
 <button id="loginBtn">Login</button>
 <div id="error"></div>
@@ -255,6 +255,7 @@ height:100vh;
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
@@ -271,25 +272,30 @@ appId: "1:535598462149:web:8d72337fdc394b2a52acac"
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-const users=[
-{user:"DreadPaladin",pass:"Cornelia_1",role:"admin"},
-{user:"BigBommel",pass:"1233095817Ae",role:"admin"},
-{user:"pilot",pass:"0815",role:"pilot"},
-{user:"verwalter",pass:"Run",role:"verwalter"}
-];
-
 let currentRole="";
 
-loginBtn.onclick=function(){
+const auth = firebase.auth();
 
-const u=username.value.trim();
-const p=password.value.trim();
+loginBtn.onclick = function(){
 
-const acc=users.find(x=>x.user===u && x.pass===p);
+const email = username.value.trim();
+const passwordInput = password.value.trim();
 
-if(!acc){
+auth.signInWithEmailAndPassword(email, passwordInput)
+.then((userCredential) => {
+
+loginCard.style.display="none";
+dashboard.style.display="block";
+
+loadAll();
+
+})
+.catch((error) => {
+
 error.innerText="Login falsch";
-return;
+
+});
+
 }
 
 currentRole = acc.role;
