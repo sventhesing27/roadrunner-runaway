@@ -275,34 +275,41 @@ const auth = firebase.auth();
 
 let currentRole="";
 
-loginBtn.onclick = function(){
+loginBtn.onclick = async function(){
 
 const email = username.value.trim();
 const passwordInput = password.value.trim();
 
-auth.signInWithEmailAndPassword(email, passwordInput)
-.then(async (userCredential) => {
+try{
 
+const userCredential = await auth.signInWithEmailAndPassword(email, passwordInput);
 const user = userCredential.user;
+
+/* Rolle laden */
 
 const doc = await db.collection("roles").doc(user.email).get();
 
 if(doc.exists){
 currentRole = doc.data().role;
+}else{
+currentRole = "pilot";
 }
+
+console.log("ROLE:", currentRole);
+
+/* Dashboard anzeigen */
 
 loginCard.style.display="none";
 dashboard.style.display="block";
 
 loadAll();
 
-})
-.catch((error) => {
+}catch(err){
 
-console.log(error);
-error.innerText = error.message;
+console.log(err);
+error.innerText = err.message;
 
-});
+}
 
 }
 
