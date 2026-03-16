@@ -285,8 +285,6 @@ try{
 const userCredential = await auth.signInWithEmailAndPassword(email, passwordInput);
 const user = userCredential.user;
 
-/* Rolle laden */
-
 const doc = await db.collection("roles").doc(user.email).get();
 
 if(doc.exists){
@@ -296,8 +294,6 @@ currentRole = "pilot";
 }
 
 console.log("ROLE:", currentRole);
-
-/* Dashboard anzeigen */
 
 loginCard.style.display="none";
 dashboard.style.display="block";
@@ -310,30 +306,6 @@ console.log(err);
 error.innerText = err.message;
 
 }
-
-}
-
-
-loginBtn.onclick = function(){
-
-const email = username.value.trim();
-const passwordInput = password.value.trim();
-
-auth.signInWithEmailAndPassword(email, passwordInput)
-.then((userCredential) => {
-
-loginCard.style.display="none";
-dashboard.style.display="block";
-
-loadAll();
-
-})
-.catch((error) => {
-
-console.log(error);
-error.innerText = error.message;
-
-});
 
 }
 
@@ -551,8 +523,6 @@ historyTable.querySelector("tbody").appendChild(tr);
 });
 }
 
-
-
 function deleteStaff(id){
 if(currentRole!=="admin"){alert("Nur Admin");return;}
 db.collection("staff").doc(id).delete();
@@ -632,8 +602,6 @@ tbody.appendChild(tr);
 });
 
 }
-
-
 
 /* EVENTS */
 
