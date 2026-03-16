@@ -281,7 +281,15 @@ const email = username.value.trim();
 const passwordInput = password.value.trim();
 
 auth.signInWithEmailAndPassword(email, passwordInput)
-.then((userCredential) => {
+.then(async (userCredential) => {
+
+const user = userCredential.user;
+
+const doc = await db.collection("roles").doc(user.email).get();
+
+if(doc.exists){
+currentRole = doc.data().role;
+}
 
 loginCard.style.display="none";
 dashboard.style.display="block";
