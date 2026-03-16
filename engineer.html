@@ -3,27 +3,29 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Elite Dangerous Engineering Guide EXTREME</title>
+<title>Elite Dangerous – Engineering Companion (Deutsch)</title>
 
 <style>
-body{background:#0b0b0b;color:#ddd;font-family:Arial;margin:0}
-header{background:#111;padding:20px;text-align:center;font-size:30px}
+body{background:#0b0b0b;color:#e0e0e0;font-family:Arial;margin:0}
+header{background:#111;padding:25px;text-align:center;font-size:30px;font-weight:bold}
 main{max-width:1200px;margin:auto;padding:20px}
-.card{background:#151515;padding:20px;border-radius:10px;margin-bottom:20px}
-select,input{width:100%;padding:8px;margin-top:8px;background:#000;color:white;border:1px solid #333}
-button{padding:10px;margin-top:10px;background:#c9a06b;border:0;font-weight:bold}
+.card{background:#151515;padding:20px;border-radius:10px;margin-bottom:25px}
+select{width:100%;padding:10px;margin-top:10px;background:#000;color:white;border:1px solid #333}
+button{padding:12px;margin-top:12px;background:#c9a06b;border:0;font-weight:bold;cursor:pointer;width:100%}
 table{width:100%;margin-top:15px;border-collapse:collapse}
 td,th{padding:8px;border-bottom:1px solid #333;text-align:left}
+.result{font-size:18px;margin-top:15px;line-height:1.6}
 </style>
 </head>
 
 <body>
 
-<header>Elite Dangerous – Ultimativer Ingenieur Guide</header>
+<header>Elite Dangerous – Engineering Companion (Deutsch)</header>
 
 <main>
 
 <div class="card">
+
 <h3>Schiff auswählen</h3>
 <select id="ship">
 <option>Sidewinder</option>
@@ -31,10 +33,10 @@ td,th{padding:8px;border-bottom:1px solid #333;text-align:left}
 <option>Hauler</option>
 <option>Eagle</option>
 <option>Imperial Eagle</option>
-<option>Cobra Mk III</option>
-<option>Cobra Mk IV</option>
 <option>Viper Mk III</option>
 <option>Viper Mk IV</option>
+<option>Cobra Mk III</option>
+<option>Cobra Mk IV</option>
 <option>Vulture</option>
 <option>Diamondback Scout</option>
 <option>Diamondback Explorer</option>
@@ -67,123 +69,187 @@ td,th{padding:8px;border-bottom:1px solid #333;text-align:left}
 <option>Dolphin</option>
 </select>
 
+<h3>Einsatz auswählen</h3>
+<select id="role">
+<option>Kampf</option>
+<option>Erkundung</option>
+<option>Bergbau</option>
+<option>Handel</option>
+<option>AX (Anti‑Xeno)</option>
+<option>Allround</option>
+</select>
+
 <h3>Modul auswählen</h3>
 <select id="module">
-<option>Frame Shift Drive</option>
-<option>Thrusters</option>
-<option>Power Plant</option>
-<option>Power Distributor</option>
-<option>Life Support</option>
-<option>Sensors</option>
-<option>Shield Generator</option>
-<option>Bi‑Weave Shield Generator</option>
-<option>Prismatic Shield Generator</option>
-<option>Shield Cell Bank</option>
-<option>Hull Reinforcement Package</option>
-<option>Module Reinforcement Package</option>
-<option>Fuel Scoop</option>
-<option>Cargo Rack</option>
+<option>Frameshift-Antrieb</option>
+<option>Triebwerke</option>
+<option>Kraftwerk</option>
+<option>Energieverteiler</option>
+<option>Lebenserhaltung</option>
+<option>Sensoren</option>
+<option>Schildgenerator</option>
+<option>Bi-Weave Schildgenerator</option>
+<option>Prismatischer Schildgenerator</option>
+<option>Schildverstärker</option>
+<option>Schildzellenbank</option>
+<option>Rumpfverstärkung</option>
+<option>Modulverstärkung</option>
+<option>Treibstoffsammler (Fuel Scoop)</option>
+<option>Frachterweiterung (Cargo Rack)</option>
 <option>Guardian FSD Booster</option>
-<option>Shield Booster</option>
-<option>Heat Sink Launcher</option>
-<option>Chaff Launcher</option>
-<option>Point Defence</option>
+<option>Kühlkörperwerfer</option>
+<option>Täuschkörperwerfer (Chaff)</option>
+<option>Punktverteidigung</option>
 <option>ECM</option>
-<option>Pulse Laser</option>
-<option>Burst Laser</option>
-<option>Beam Laser</option>
-<option>Multi‑cannon</option>
-<option>Cannon</option>
-<option>Fragment Cannon</option>
+<option>Pulslaser</option>
+<option>Burst-Laser</option>
+<option>Strahlenlaser</option>
+<option>Multikanone</option>
+<option>Kanone</option>
+<option>Fragmentkanone</option>
 <option>Railgun</option>
-<option>Plasma Accelerator</option>
-<option>Seeker Missile Rack</option>
-<option>Dumbfire Missile Rack</option>
-<option>Torpedo Pylon</option>
-<option>Mining Laser</option>
+<option>Plasmabeschleuniger</option>
+<option>Lenkraketenwerfer</option>
+<option>Ungelenkte Raketen</option>
+<option>Torpedowerfer</option>
+<option>Bergbaulaser</option>
 <option>Abrasion Blaster</option>
 <option>Seismic Charge Launcher</option>
-<option>AX Multi‑cannon</option>
-<option>AX Missile Rack</option>
-<option>Guardian Gauss Cannon</option>
+<option>AX Multikanone</option>
+<option>AX Raketenwerfer</option>
+<option>Guardian Gausskanone</option>
 <option>Guardian Plasma Charger</option>
 <option>Guardian Shard Cannon</option>
 </select>
 
-<button onclick="zeige()">Engineering anzeigen</button>
+<button onclick="zeige()">Empfehlung anzeigen</button>
 
-<table>
-<thead>
-<tr>
-<th>Schiff</th>
-<th>Modul</th>
-<th>Hinweis</th>
-</tr>
-</thead>
-<tbody id="result"></tbody>
-</table>
+<div id="result" class="result"></div>
+
 </div>
 
 <div class="card">
-<h3>Ingenieure</h3>
+
+<h3>Ingenieure und maximaler Grad</h3>
+
 <table>
 <thead>
 <tr>
 <th>Ingenieur</th>
 <th>System</th>
 <th>Spezialisierung</th>
+<th>Max Grad</th>
 </tr>
 </thead>
+
 <tbody>
-<tr><td>Felicity Farseer</td><td>Deciat</td><td>Frameshift</td></tr>
-<tr><td>The Dweller</td><td>Wyrd</td><td>Energie Verteiler</td></tr>
-<tr><td>Tod McQuinn</td><td>Wolf 397</td><td>Mehrfach Geschütze</td></tr>
-<tr><td>Lei Cheung</td><td>Laksak</td><td>Schild Generator</td></tr>
-<tr><td>Hera Tani</td><td>Kuwemaki</td><td>Kraftwerk</td></tr>
-<tr><td>Professor Palin</td><td>Arque</td><td>Antriebe</td></tr>
-<tr><td>Selene Jean</td><td>Kuk</td><td>Rumpfhülle</td></tr>
-<tr><td>Didi Vatermann</td><td>Leesti</td><td>Schild Booster</td></tr>
-<tr><td>Ram Tah</td><td>Meene</td><td>Guardian Tech</td></tr>
-<tr><td>Zacariah Nemo</td><td>Yoru</td><td>Fragment Cannon</td></tr>
-<tr><td>Lori Jameson</td><td>Shinrarta Dezhra</td><td>Sensors</td></tr>
-<tr><td>Lori Jameson</td><td>Shinrarta Dezhra</td><td>Lebenserhaltung</td></tr>
-<tr><td>Broo Tarquin</td><td>Muang</td><td>Laser</td></tr>
+
+<tr><td>Felicity Farseer</td><td>Deciat</td><td>Frameshift‑Antrieb</td><td>Grad 5</td></tr>
+<tr><td>Elvira Martuuk</td><td>Khun</td><td>Frameshift‑Antrieb</td><td>Grad 5</td></tr>
+<tr><td>Professor Palin</td><td>Arque</td><td>Triebwerke</td><td>Grad 5</td></tr>
+<tr><td>The Dweller</td><td>Wyrd</td><td>Energieverteiler</td><td>Grad 5</td></tr>
+<tr><td>Marco Qwent</td><td>Sirius</td><td>Kraftwerk</td><td>Grad 4</td></tr>
+<tr><td>Hera Tani</td><td>Kuwemaki</td><td>Kraftwerk</td><td>Grad 5</td></tr>
+<tr><td>Lei Cheung</td><td>Laksak</td><td>Schildgenerator</td><td>Grad 5</td></tr>
+<tr><td>Didi Vatermann</td><td>Leesti</td><td>Schildverstärker</td><td>Grad 5</td></tr>
+<tr><td>Selene Jean</td><td>Kuk</td><td>Rumpfverstärkung</td><td>Grad 5</td></tr>
+<tr><td>Tod McQuinn</td><td>Wolf 397</td><td>Multikanonen</td><td>Grad 5</td></tr>
+<tr><td>Broo Tarquin</td><td>Muang</td><td>Laserwaffen</td><td>Grad 5</td></tr>
+<tr><td>Zacariah Nemo</td><td>Yoru</td><td>Fragmentkanonen</td><td>Grad 5</td></tr>
+<tr><td>Bill Turner</td><td>Alioth</td><td>Plasmabeschleuniger</td><td>Grad 5</td></tr>
+<tr><td>Lori Jameson</td><td>Shinrarta Dezhra</td><td>High‑End Engineering</td><td>Grad 5</td></tr>
+
 </tbody>
 </table>
+
 </div>
 
 <div class="card">
-<h3>Build Vorschläge</h3>
+
+<h3>Typische Builds nach Einsatz</h3>
+
 <table>
 <thead>
 <tr>
-<th>Build Typ</th>
-<th>Beschreibung</th>
+<th>Einsatz</th>
+<th>Empfohlene Mods</th>
 </tr>
 </thead>
+
 <tbody>
-<tr><td>Exploration Build</td><td>FSD Reichweite, Leichtgewicht Module, Fuel Scoop</td></tr>
-<tr><td>Combat Build</td><td>Starke Schilde, Waffen Engineering, Distributor Boost</td></tr>
-<tr><td>Mining Build</td><td>Mining Laser, Limpet Controller, Cargo Rack</td></tr>
-<tr><td>AX Build</td><td>Guardian Waffen, starke Panzerung</td></tr>
+
+<tr>
+<td>Kampf</td>
+<td>Dirty Drives, verstärkte Schilde, Overcharged Multikanonen, Charge Enhanced Energieverteiler</td>
+</tr>
+
+<tr>
+<td>Erkundung</td>
+<td>Frameshift‑Antrieb Increased Range, Lightweight Module, Guardian FSD Booster</td>
+</tr>
+
+<tr>
+<td>Bergbau</td>
+<td>Energieverteiler Charge Enhanced, Mining Laser, große Cargo Racks</td>
+</tr>
+
+<tr>
+<td>Handel</td>
+<td>Große Frachträume, verstärkte Schilde, effizientes Kraftwerk</td>
+</tr>
+
+<tr>
+<td>AX</td>
+<td>Guardian Gausskanonen, starke Rumpfverstärkung, Thermal Vent Laser</td>
+</tr>
+
 </tbody>
+
 </table>
+
 </div>
 
 </main>
 
 <script>
-function zeige(){
-const ship=document.getElementById("ship").value;
-const module=document.getElementById("module").value;
 
-document.getElementById("result").innerHTML=`
-<tr>
-<td>${ship}</td>
-<td>${module}</td>
-<td>Engineering bei passenden Ingenieuren möglich</td>
-</tr>`;
+function zeige(){
+const module=document.getElementById("module").value;
+const role=document.getElementById("role").value;
+
+let text="";
+
+if(module==="Frameshift-Antrieb"){
+text="<b>Empfohlen:</b> Increased Range (Grad 5) + Mass Manager<br><b>Ingenieur:</b> Felicity Farseer / Elvira Martuuk";
 }
+else if(module==="Triebwerke"){
+text="<b>Empfohlen:</b> Dirty Drives (Grad 5) + Drag Drives<br><b>Ingenieur:</b> Professor Palin";
+}
+else if(module==="Energieverteiler"){
+text="<b>Empfohlen:</b> Charge Enhanced (Grad 5)<br><b>Ingenieur:</b> The Dweller";
+}
+else if(module==="Schildgenerator" || module==="Bi-Weave Schildgenerator" || module==="Prismatischer Schildgenerator"){
+text="<b>Empfohlen:</b> Reinforced Shields + High Capacity<br><b>Ingenieur:</b> Lei Cheung";
+}
+else if(module==="Multikanone"){
+text="<b>Empfohlen:</b> Overcharged + Auto Loader<br><b>Ingenieur:</b> Tod McQuinn";
+}
+else if(module==="Strahlenlaser" || module==="Pulslaser" || module==="Burst-Laser"){
+text="<b>Empfohlen:</b> Efficient Weapon + Thermal Vent<br><b>Ingenieur:</b> Broo Tarquin";
+}
+else if(module==="Plasmabeschleuniger"){
+text="<b>Empfohlen:</b> Efficient / Overcharged<br><b>Ingenieur:</b> Bill Turner";
+}
+else{
+text="Für dieses Modul gibt es mehrere mögliche Engineering Mods.";
+}
+
+text+="<br><br><b>Einsatz:</b> "+role;
+
+document.getElementById("result").innerHTML=text;
+
+}
+
 </script>
 
 </body>
