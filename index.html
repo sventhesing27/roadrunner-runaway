@@ -112,7 +112,8 @@ height:100vh;
 <a onclick="show('materials')">Material Orte</a>
 <a onclick="show('engineer')">Ingenieure</a>
 </nav>
-<button onclick="backupFirestore()">Backup</button>
+<button onclick="backupFirestore()" id="backupBtn" style="display:none">Backup</button>
+<button onclick="restoreFirestore()" id="restoreBtn" style="display:none">Restore</button>
 <button onclick="logout()">Logout</button>
 </header>
 
@@ -255,9 +256,249 @@ height:100vh;
 </main>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
+/* FIREBASE BACKUP */
+
+async function backupFirestore(){
+
+const collections = [
+"staff",
+"inventory",
+"orders",
+"links",
+"history",
+"materials",
+"events",
+"roles"
+];
+
+let backup = {};
+
+for(const name of collections){
+
+const snapshot = await db.collection(name).get();
+
+backup[name] = [];
+
+snapshot.forEach(doc=>{
+backup[name].push({
+id: doc.id,
+...doc.data()
+});
+});
+
+}
+
+const dataStr = JSON.stringify(backup,null,2);
+const blob = new Blob([dataStr], {type:"application/json"});
+
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "firebase-backup.json";
+a.click();
+
+alert("Backup heruntergeladen");
+}
+
+
+/* FIREBASE RESTORE */
+
+async function restoreFirestore(){
+
+const input = document.createElement("input");
+input.type = "file";
+input.accept = ".json";
+
+input.onchange = async e => {
+
+const file = e.target.files[0];
+const text = await file.text();
+const data = JSON.parse(text);
+
+for(const collection in data){
+
+for(const doc of data[collection]){
+
+const id = doc.id;
+delete doc.id;
+
+await db.collection(collection).doc(id).set(doc);
+
+}
+
+}
+
+alert("Restore fertig");
+
+};
+
+input.click();
+
+}
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js">
+/* FIREBASE BACKUP */
+
+async function backupFirestore(){
+
+const collections = [
+"staff",
+"inventory",
+"orders",
+"links",
+"history",
+"materials",
+"events",
+"roles"
+];
+
+let backup = {};
+
+for(const name of collections){
+
+const snapshot = await db.collection(name).get();
+
+backup[name] = [];
+
+snapshot.forEach(doc=>{
+backup[name].push({
+id: doc.id,
+...doc.data()
+});
+});
+
+}
+
+const dataStr = JSON.stringify(backup,null,2);
+const blob = new Blob([dataStr], {type:"application/json"});
+
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "firebase-backup.json";
+a.click();
+
+alert("Backup heruntergeladen");
+}
+
+
+/* FIREBASE RESTORE */
+
+async function restoreFirestore(){
+
+const input = document.createElement("input");
+input.type = "file";
+input.accept = ".json";
+
+input.onchange = async e => {
+
+const file = e.target.files[0];
+const text = await file.text();
+const data = JSON.parse(text);
+
+for(const collection in data){
+
+for(const doc of data[collection]){
+
+const id = doc.id;
+delete doc.id;
+
+await db.collection(collection).doc(id).set(doc);
+
+}
+
+}
+
+alert("Restore fertig");
+
+};
+
+input.click();
+
+}
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js">
+/* FIREBASE BACKUP */
+
+async function backupFirestore(){
+
+const collections = [
+"staff",
+"inventory",
+"orders",
+"links",
+"history",
+"materials",
+"events",
+"roles"
+];
+
+let backup = {};
+
+for(const name of collections){
+
+const snapshot = await db.collection(name).get();
+
+backup[name] = [];
+
+snapshot.forEach(doc=>{
+backup[name].push({
+id: doc.id,
+...doc.data()
+});
+});
+
+}
+
+const dataStr = JSON.stringify(backup,null,2);
+const blob = new Blob([dataStr], {type:"application/json"});
+
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "firebase-backup.json";
+a.click();
+
+alert("Backup heruntergeladen");
+}
+
+
+/* FIREBASE RESTORE */
+
+async function restoreFirestore(){
+
+const input = document.createElement("input");
+input.type = "file";
+input.accept = ".json";
+
+input.onchange = async e => {
+
+const file = e.target.files[0];
+const text = await file.text();
+const data = JSON.parse(text);
+
+for(const collection in data){
+
+for(const doc of data[collection]){
+
+const id = doc.id;
+delete doc.id;
+
+await db.collection(collection).doc(id).set(doc);
+
+}
+
+}
+
+alert("Restore fertig");
+
+};
+
+input.click();
+
+}
+
+</script>
 
 <script>
 
@@ -295,6 +536,11 @@ currentRole = "pilot";
 }
 
 console.log("ROLE:", currentRole);
+
+if(currentRole === "admin"){
+ document.getElementById("backupBtn").style.display="inline-block";
+ document.getElementById("restoreBtn").style.display="inline-block";
+}
 
 loginCard.style.display="none";
 dashboard.style.display="block";
@@ -677,6 +923,7 @@ loadMaterials();
 loadEvents();
 }
 
+
 /* FIREBASE BACKUP */
 
 async function backupFirestore(){
@@ -709,8 +956,6 @@ id: doc.id,
 
 }
 
-/* JSON Datei erstellen */
-
 const dataStr = JSON.stringify(backup,null,2);
 const blob = new Blob([dataStr], {type:"application/json"});
 
@@ -718,6 +963,43 @@ const a = document.createElement("a");
 a.href = URL.createObjectURL(blob);
 a.download = "firebase-backup.json";
 a.click();
+
+alert("Backup heruntergeladen");
+}
+
+
+/* FIREBASE RESTORE */
+
+async function restoreFirestore(){
+
+const input = document.createElement("input");
+input.type = "file";
+input.accept = ".json";
+
+input.onchange = async e => {
+
+const file = e.target.files[0];
+const text = await file.text();
+const data = JSON.parse(text);
+
+for(const collection in data){
+
+for(const doc of data[collection]){
+
+const id = doc.id;
+delete doc.id;
+
+await db.collection(collection).doc(id).set(doc);
+
+}
+
+}
+
+alert("Restore fertig");
+
+};
+
+input.click();
 
 }
 
