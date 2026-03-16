@@ -292,7 +292,8 @@ loadAll();
 })
 .catch((error) => {
 
-error.innerText="Login falsch";
+console.log(error);
+error.innerText = error.message;
 
 });
 
