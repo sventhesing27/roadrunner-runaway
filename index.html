@@ -112,6 +112,7 @@ height:100vh;
 <a onclick="show('materials')">Material Orte</a>
 <a onclick="show('engineer')">Ingenieure</a>
 </nav>
+<button onclick="backupFirestore()">Backup</button>
 <button onclick="logout()">Logout</button>
 </header>
 
@@ -674,6 +675,50 @@ loadLinks();
 loadHistory();
 loadMaterials();
 loadEvents();
+}
+
+/* FIREBASE BACKUP */
+
+async function backupFirestore(){
+
+const collections = [
+"staff",
+"inventory",
+"orders",
+"links",
+"history",
+"materials",
+"events",
+"roles"
+];
+
+let backup = {};
+
+for(const name of collections){
+
+const snapshot = await db.collection(name).get();
+
+backup[name] = [];
+
+snapshot.forEach(doc=>{
+backup[name].push({
+id: doc.id,
+...doc.data()
+});
+});
+
+}
+
+/* JSON Datei erstellen */
+
+const dataStr = JSON.stringify(backup,null,2);
+const blob = new Blob([dataStr], {type:"application/json"});
+
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "firebase-backup.json";
+a.click();
+
 }
 
 </script>
